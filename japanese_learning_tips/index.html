@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Learn Japanese — Simple, Fast, Input-First Plan</title>
+
+  <!-- Bootstrap 5.0.2 (your preferred CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  <style>
+    :root{
+      --bg1:#0b1220;
+      --bg2:#0f1b34;
+      --text:#eaf0ff;
+      --muted:#a9b7da;
+      --accent:#7c5cff;
+      --accent2:#15c39a;
+      --border: rgba(255,255,255,.10);
+      --shadow: 0 12px 30px rgba(0,0,0,.45);
+    }
+    body{
+      background: radial-gradient(1200px 700px at 10% 10%, rgba(124,92,255,.25), transparent 60%),
+                  radial-gradient(1000px 600px at 90% 20%, rgba(21,195,154,.18), transparent 55%),
+                  linear-gradient(180deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .navbar{
+      background: rgba(10,16,30,.75) !important;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero{ padding: 4.2rem 0 2.6rem; }
+    .badge-soft{
+      background: rgba(124,92,255,.18);
+      border: 1px solid rgba(124,92,255,.35);
+      color: var(--text);
+    }
+    .card-glass{
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 1.25rem;
+    }
+    .card-solid{
+      background: rgba(15,26,46,.85);
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 24px rgba(0,0,0,.35);
+      border-radius: 1.25rem;
+    }
+    .muted{ color: var(--muted); }
+
+    .btn-accent{
+      background: linear-gradient(135deg, var(--accent), #9a7bff);
+      border: none;
+      color: white;
+      box-shadow: 0 10px 22px rgba(124,92,255,.25);
+    }
+    .btn-accent:hover{ filter: brightness(1.05); }
+
+    .btn-accent2{
+      background: linear-gradient(135deg, var(--accent2), #34d6b1);
+      border: none;
+      color: #072018;
+      box-shadow: 0 10px 22px rgba(21,195,154,.18);
+      font-weight: 600;
+    }
+    .btn-accent2:hover{ filter: brightness(1.05); }
+
+    .pill{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      border-radius: 999px;
+      padding: .35rem .65rem;
+      display: inline-flex;
+      gap: .45rem;
+      align-items: center;
+      font-size: .92rem;
+      color: var(--muted);
+    }
+
+    .step-num{
+      width: 36px; height: 36px;
+      border-radius: 12px;
+      display: grid; place-items: center;
+      background: rgba(124,92,255,.18);
+      border: 1px solid rgba(124,92,255,.35);
+      font-weight: 700;
+      color: var(--text);
+      flex: 0 0 auto;
+    }
+
+    .section{ padding: 2.1rem 0; }
+
+    .divider{
+      height: 1px;
+      background: var(--border);
+      margin: 1.4rem 0;
+    }
+
+    .shadow-soft{ box-shadow: 0 10px 20px rgba(0,0,0,.35); }
+
+    .link-card{
+      text-decoration: none;
+      color: inherit;
+      transition: transform .12s ease, filter .12s ease;
+      display: block;
+    }
+    .link-card:hover{
+      transform: translateY(-2px);
+      filter: brightness(1.04);
+      color: inherit;
+    }
+
+    .mini{ font-size: .92rem; }
+
+    .kbdish{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      border-radius: .6rem;
+      padding: .2rem .45rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: .9rem;
+      color: var(--text);
+    }
+
+    .form-check-input{ cursor: pointer; }
+
+    footer{
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAV -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#top">日本語 Plan</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"
+              aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="nav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#start">Start</a></li>
+          <li class="nav-item"><a class="nav-link" href="#routine">Daily Routine</a></li>
+          <li class="nav-item"><a class="nav-link" href="#reading">Reading</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tprs">TPRS / CI</a></li>
+          <li class="nav-item"><a class="nav-link" href="#resources">Sources</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tracker">Tracker</a></li>
+          <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header id="top" class="hero">
+    <div class="container">
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-7">
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <span class="badge rounded-pill badge-soft px-3 py-2">Input-first</span>
+            <span class="badge rounded-pill badge-soft px-3 py-2">Beginner-friendly</span>
+            <span class="badge rounded-pill badge-soft px-3 py-2">Phone-ready</span>
+          </div>
+          <h1 class="display-5 fw-bold lh-1 mb-3">
+            Learn Japanese the “natural” way:
+            <span style="color: var(--accent2)">read early</span>, listen a lot,
+            and keep it simple.
+          </h1>
+          <p class="lead muted mb-4">
+            Start with <b>hiragana reading</b> in Duolingo, and as soon as you can read even a little,
+            immediately move to <b>very easy kids texts</b> (mostly hiragana, tiny bit of kanji).
+            Combine that with <b>TPRS / Comprehensible Input</b> every day.
+          </p>
+
+          <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-accent btn-lg px-4" href="#start">Start the plan</a>
+            <a class="btn btn-outline-light btn-lg px-4" href="#resources">Best links</a>
+          </div>
+
+          <div class="mt-4 d-flex flex-wrap gap-2">
+            <span class="pill">✅ No “grammar overload”</span>
+            <span class="pill">✅ Fast reading confidence</span>
+            <span class="pill">✅ Built for consistency</span>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="card card-glass p-4">
+            <h5 class="fw-bold mb-2">The 3 rules</h5>
+            <ol class="mb-0 muted">
+              <li class="mb-2"><b>Read early.</b> Don’t wait for “perfect”.</li>
+              <li class="mb-2"><b>Understand first.</b> Input before output.</li>
+              <li class="mb-0"><b>Repeat a lot.</b> Same easy content many times.</li>
+            </ol>
+            <div class="divider"></div>
+            <div class="mini muted">
+              Tip: If something feels hard, go <b>easier</b>, not “more advanced”.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- START -->
+  <section id="start" class="section">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="card card-solid p-4 h-100">
+            <div class="d-flex gap-3 align-items-start">
+              <div class="step-num">1</div>
+              <div>
+                <h4 class="fw-bold mb-1">Duolingo → hiragana reading</h4>
+                <p class="muted mb-3">
+                  Use Duolingo mainly to get comfortable reading <b>ひらがな</b>.
+                  Don’t worry about being perfect — you just need enough to start reading real text.
+                </p>
+                <ul class="muted mb-0">
+                  <li>Goal: read slowly but correctly</li>
+                  <li>Daily: 10–15 minutes</li>
+                  <li>Stop overthinking explanations</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card card-solid p-4 h-100">
+            <div class="d-flex gap-3 align-items-start">
+              <div class="step-num">2</div>
+              <div>
+                <h4 class="fw-bold mb-1">Immediately start reading kids texts</h4>
+                <p class="muted mb-3">
+                  As soon as you can read even a part of hiragana, start reading
+                  <b>very easy</b> texts: mostly hiragana, and only a tiny bit of kanji.
+                </p>
+                <ul class="muted mb-0">
+                  <li>Re-read the same short text 3–5 times</li>
+                  <li>Use a click-translation dictionary if needed</li>
+                  <li>Don’t “study” every word — keep moving</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-12">
+          <div class="card card-glass p-4">
+            <div class="d-flex flex-wrap justify-content-between gap-3 align-items-center">
+              <div>
+                <h4 class="fw-bold mb-1">What to do when you don’t understand</h4>
+                <div class="muted">
+                  Use the “traffic light” method: <span class="kbdish">Green</span> = understand most →
+                  continue. <span class="kbdish">Yellow</span> = understand some → re-read / slower.
+                  <span class="kbdish">Red</span> = understand almost nothing → pick <b>easier</b> content.
+                </div>
+              </div>
+              <a href="#reading" class="btn btn-accent2 px-4">See reading ladder</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- DAILY ROUTINE -->
+  <section id="routine" class="section">
+    <div class="container">
+      <h2 class="fw-bold mb-2">Daily routine (15–45 minutes)</h2>
+      <p class="muted mb-4">Small daily practice beats long rare sessions. Pick one of these “menus”.</p>
+
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="card card-glass p-4 h-100">
+            <h5 class="fw-bold">15 minutes (minimum)</h5>
+            <ul class="muted mb-0">
+              <li>5 min Duolingo (hiragana reading)</li>
+              <li>10 min easy listening (CI / TPRS)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card card-glass p-4 h-100">
+            <h5 class="fw-bold">30 minutes (best)</h5>
+            <ul class="muted mb-0">
+              <li>10 min Duolingo (reading)</li>
+              <li>10 min kids text reading (re-read)</li>
+              <li>10 min CI / TPRS listening</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card card-glass p-4 h-100">
+            <h5 class="fw-bold">45 minutes (fast progress)</h5>
+            <ul class="muted mb-0">
+              <li>10 min Duolingo</li>
+              <li>15 min reading + re-read</li>
+              <li>20 min CI / TPRS (repeat same video)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="card card-solid p-4">
+            <h5 class="fw-bold mb-2">The “repeat rule” (this is the secret)</h5>
+            <p class="muted mb-0">
+              Instead of chasing new content, repeat the same easy text/video until it becomes comfortable.
+              That’s how your brain builds speed and understanding.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- READING -->
+  <section id="reading" class="section">
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-3">
+        <div>
+          <h2 class="fw-bold mb-1">Reading ladder (start early)</h2>
+          <p class="muted mb-0">Choose the easiest option that still feels “real”.</p>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="card card-solid p-4 h-100">
+            <h5 class="fw-bold">Level A — ultra easy</h5>
+            <p class="muted mb-2">Mostly hiragana, tiny sentences, repetition.</p>
+            <ul class="muted mb-0">
+              <li>Kids mini-stories</li>
+              <li>Picture + 1–2 lines</li>
+              <li>Re-read 3–5 times</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card card-solid p-4 h-100">
+            <h5 class="fw-bold">Level B — easy stories</h5>
+            <p class="muted mb-2">Still easy, but longer. Some simple kanji appears.</p>
+            <ul class="muted mb-0">
+              <li>Short paragraphs</li>
+              <li>Same topic vocabulary</li>
+              <li>Keep moving (don’t stop on every word)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card card-solid p-4 h-100">
+            <h5 class="fw-bold">Level C — graded readers</h5>
+            <p class="muted mb-2">Begin to handle more kanji slowly and naturally.</p>
+            <ul class="muted mb-0">
+              <li>Read for meaning, not perfection</li>
+              <li>Track comfort, not “test scores”</li>
+              <li>Add kanji gradually</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="card card-glass p-4">
+            <div class="row g-3 align-items-center">
+              <div class="col-lg-8">
+                <h5 class="fw-bold mb-1">What “good reading” looks like</h5>
+                <div class="muted">
+                  If you understand the main idea and recognize repeated words, you’re winning.
+                  Your speed will come from repetition + easy content.
+                </div>
+              </div>
+              <div class="col-lg-4 text-lg-end">
+                <a href="#tprs" class="btn btn-accent px-4">Combine with TPRS</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TPRS / CI -->
+  <section id="tprs" class="section">
+    <div class="container">
+      <h2 class="fw-bold mb-2">TPRS / Comprehensible Input (CI)</h2>
+      <p class="muted mb-4">
+        This is how you build real understanding. You’re not memorizing rules — you’re absorbing patterns.
+      </p>
+
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="card card-glass p-4 h-100">
+            <h5 class="fw-bold">How to use CI correctly</h5>
+            <ul class="muted mb-0">
+              <li>Pick something you understand ~70%+</li>
+              <li>Watch/listen again (same episode)</li>
+              <li>Point at the meaning in your head (no translating every word)</li>
+              <li>Let phrases repeat until they feel obvious</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card card-glass p-4 h-100">
+            <h5 class="fw-bold">When to start speaking?</h5>
+            <p class="muted mb-2">
+              You can speak from day 1 (simple copying), but don’t force it.
+              Focus on understanding first — speech becomes easier automatically.
+            </p>
+            <div class="muted">
+              Easy output idea: repeat one sentence from a video 5 times daily.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="card card-solid p-4">
+        <div class="row g-3 align-items-center">
+          <div class="col-lg-8">
+            <h5 class="fw-bold mb-1">Use these daily (quick access)</h5>
+            <div class="muted">Repetition is the engine. Keep it easy.</div>
+          </div>
+          <div class="col-lg-4 text-lg-end d-flex flex-wrap justify-content-lg-end gap-2">
+            <a class="btn btn-accent2 px-3" target="_blank" rel="noopener" href="https://cijapanese.com/watch">CI Japanese ↗</a>
+            <a class="btn btn-outline-light px-3" target="_blank" rel="noopener"
+               href="https://www.youtube.com/watch?v=WhinhWmkduo&list=PLlwV5WdI6V3vCI4QoWoPDVaBs8SWe41OL">TPRS Playlist ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOURCES -->
+  <section id="resources" class="section">
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-3">
+        <div>
+          <h2 class="fw-bold mb-1">Sources (click & go)</h2>
+          <p class="muted mb-0">Four core sources: CI videos, TPRS playlist, easy reading website, and “Peppa Pig Japanese” search.</p>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <a class="link-card" href="https://cijapanese.com/watch" target="_blank" rel="noopener">
+            <div class="card card-solid p-4 h-100">
+              <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                  <h4 class="fw-bold mb-1">CI Japanese — Watch</h4>
+                  <p class="muted mb-3">Comprehensible Input library: watch, understand, repeat.</p>
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="pill">🎧 Listening</span>
+                    <span class="pill">🔁 Repeat</span>
+                    <span class="pill">🧠 Understand</span>
+                  </div>
+                </div>
+                <span class="badge rounded-pill badge-soft px-3 py-2">Open ↗</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-lg-6">
+          <a class="link-card" href="https://www.youtube.com/watch?v=WhinhWmkduo&list=PLlwV5WdI6V3vCI4QoWoPDVaBs8SWe41OL"
+             target="_blank" rel="noopener">
+            <div class="card card-solid p-4 h-100">
+              <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                  <h4 class="fw-bold mb-1">TPRS / CI YouTube Playlist</h4>
+                  <p class="muted mb-3">Story-based input: pick one video and repeat until it becomes easy.</p>
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="pill">📚 Stories</span>
+                    <span class="pill">🗣️ Phrases</span>
+                    <span class="pill">✅ Easy</span>
+                  </div>
+                </div>
+                <span class="badge rounded-pill badge-soft px-3 py-2">Open ↗</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-lg-6">
+          <a class="link-card" href="https://langsage.github.io/japanese_reader/" target="_blank" rel="noopener">
+            <div class="card card-solid p-4 h-100">
+              <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                  <h4 class="fw-bold mb-1">Easy Reading Website</h4>
+                  <p class="muted mb-3">Short, beginner-friendly reading. Perfect right after hiragana basics.</p>
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="pill">📖 Reading</span>
+                    <span class="pill">🧩 Easy</span>
+                    <span class="pill">🚀 Early start</span>
+                  </div>
+                </div>
+                <span class="badge rounded-pill badge-soft px-3 py-2">Open ↗</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-lg-6">
+          <a class="link-card" href="https://www.youtube.com/results?search_query=pepa+pig+japanese" target="_blank" rel="noopener">
+            <div class="card card-solid p-4 h-100">
+              <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                  <h4 class="fw-bold mb-1">Peppa Pig (Japanese) — YouTube search</h4>
+                  <p class="muted mb-3">Fun “easy listening” option. Use it as extra CI when you want variety.</p>
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="pill">🐷 Fun</span>
+                    <span class="pill">🎧 Listening</span>
+                    <span class="pill">🔁 Repeat scenes</span>
+                  </div>
+                </div>
+                <span class="badge rounded-pill badge-soft px-3 py-2">Open ↗</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="card card-glass p-4">
+        <h5 class="fw-bold mb-2">How to use “Peppa Pig Japanese” correctly</h5>
+        <ul class="muted mb-0">
+          <li>Pick 1 short episode or scene.</li>
+          <li>Watch 2–3 times over a week (same scene).</li>
+          <li>Don’t pause every 3 seconds—only pause if you’re totally lost.</li>
+          <li>If it feels too hard: go back to easier CI videos and easier reading.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRACKER -->
+  <section id="tracker" class="section">
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-3">
+        <div>
+          <h2 class="fw-bold mb-1">Progress tracker (saves on this device)</h2>
+          <p class="muted mb-0">Check items off as you go. This page remembers your progress.</p>
+        </div>
+        <button id="resetBtn" class="btn btn-outline-light btn-sm">Reset tracker</button>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="card card-glass p-4 h-100">
+            <h5 class="fw-bold mb-3">Milestones</h5>
+
+            <div class="form-check mb-2">
+              <input class="form-check-input tracker" type="checkbox" id="m1">
+              <label class="form-check-label" for="m1">I can read most hiragana slowly</label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input tracker" type="checkbox" id="m2">
+              <label class="form-check-label" for="m2">I read a kids text (hiragana-heavy) today</label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input tracker" type="checkbox" id="m3">
+              <label class="form-check-label" for="m3">I repeated the same story/video 2+ times</label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input tracker" type="checkbox" id="m4">
+              <label class="form-check-label" for="m4">I understand the “main idea” without translating everything</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input tracker" type="checkbox" id="m5">
+              <label class="form-check-label" for="m5">I practiced at least 5 days this week</label>
+            </div>
+
+            <div class="divider"></div>
+
+            <label class="form-label fw-bold mb-1" for="goalMinutes">Daily goal (minutes)</label>
+            <div class="input-group">
+              <input class="form-control" type="number" min="5" max="180" id="goalMinutes" placeholder="e.g., 30">
+              <button class="btn btn-accent2" id="saveGoal">Save</button>
+            </div>
+            <div class="mini muted mt-2">Tip: 15 is enough to stay consistent. 30 is a strong default.</div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card card-glass p-4 h-100">
+            <h5 class="fw-bold mb-3">Weekly checkpoints</h5>
+            <div class="muted mb-3">
+              Every 7 days, ask yourself:
+              <ul class="mt-2">
+                <li>Is reading becoming easier?</li>
+                <li>Do I understand more with the same video?</li>
+                <li>Am I repeating enough?</li>
+              </ul>
+            </div>
+
+            <div class="card card-solid p-3">
+              <div class="fw-bold mb-1">Your saved goal</div>
+              <div class="muted">
+                <span id="goalOut" class="kbdish">Not set</span>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="mini muted">
+              If progress feels slow: make content easier and repeat more.
+              If you feel bored: keep it easy, just change the topic.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section">
+    <div class="container">
+      <h2 class="fw-bold mb-3">FAQ</h2>
+
+      <div class="accordion" id="faqAcc">
+        <div class="accordion-item bg-transparent border-0">
+          <h2 class="accordion-header" id="q1">
+            <button class="accordion-button collapsed shadow-soft"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#a1" aria-expanded="false" aria-controls="a1"
+                    style="background: rgba(255,255,255,.06); color: var(--text); border: 1px solid var(--border); border-radius: 1rem;">
+              Do I need to study grammar a lot?
+            </button>
+          </h2>
+          <div id="a1" class="accordion-collapse collapse" aria-labelledby="q1" data-bs-parent="#faqAcc">
+            <div class="accordion-body muted">
+              Not at the beginning. Start with understanding and reading. Later, grammar becomes easier because you’ve
+              already heard the patterns many times.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item bg-transparent border-0 mt-3">
+          <h2 class="accordion-header" id="q2">
+            <button class="accordion-button collapsed shadow-soft"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#a2" aria-expanded="false" aria-controls="a2"
+                    style="background: rgba(255,255,255,.06); color: var(--text); border: 1px solid var(--border); border-radius: 1rem;">
+              When should I learn kanji?
+            </button>
+          </h2>
+          <div id="a2" class="accordion-collapse collapse" aria-labelledby="q2" data-bs-parent="#faqAcc">
+            <div class="accordion-body muted">
+              Let kanji enter gradually through reading. Start with mostly hiragana texts and allow “a little bit of kanji”
+              to appear naturally. You don’t need to memorize huge lists right away.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item bg-transparent border-0 mt-3">
+          <h2 class="accordion-header" id="q3">
+            <button class="accordion-button collapsed shadow-soft"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#a3" aria-expanded="false" aria-controls="a3"
+                    style="background: rgba(255,255,255,.06); color: var(--text); border: 1px solid var(--border); border-radius: 1rem;">
+              What if I forget words?
+            </button>
+          </h2>
+          <div id="a3" class="accordion-collapse collapse" aria-labelledby="q3" data-bs-parent="#faqAcc">
+            <div class="accordion-body muted">
+              Forgetting is normal. Repetition fixes it. Seeing the same words in easy stories and videos builds automatic recall.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item bg-transparent border-0 mt-3">
+          <h2 class="accordion-header" id="q4">
+            <button class="accordion-button collapsed shadow-soft"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#a4" aria-expanded="false" aria-controls="a4"
+                    style="background: rgba(255,255,255,.06); color: var(--text); border: 1px solid var(--border); border-radius: 1rem;">
+              How do I know I’m improving?
+            </button>
+          </h2>
+          <div id="a4" class="accordion-collapse collapse" aria-labelledby="q4" data-bs-parent="#faqAcc">
+            <div class="accordion-body muted">
+              Re-watch an old video after 2 weeks. If you understand more with less effort, you improved — even if you can’t “explain grammar”.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div>© <span id="year"></span> Japanese Plan — simple, input-first, repeat-heavy.</div>
+        <div class="mini">Built with Bootstrap 5.0.2 • Fully responsive</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS bundle 5.0.2 (your preferred CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+  <script>
+    // Smooth anchor scrolling + close mobile nav when clicking links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const id = a.getAttribute('href');
+        if (!id || id === '#') return;
+        const el = document.querySelector(id);
+        if (!el) return;
+        e.preventDefault();
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const nav = document.getElementById('nav');
+        if (nav && nav.classList.contains('show')) {
+          bootstrap.Collapse.getOrCreateInstance(nav).hide();
+        }
+      });
+    });
+
+    // Tracker: persist checkbox states in localStorage
+    const KEY = 'jp_plan_tracker_v1';
+    const trackers = Array.from(document.querySelectorAll('.tracker'));
+
+    function loadTracker(){
+      try{
+        const data = JSON.parse(localStorage.getItem(KEY) || '{}');
+        trackers.forEach(ch => ch.checked = !!data[ch.id]);
+      }catch(e){}
+    }
+    function saveTracker(){
+      const data = {};
+      trackers.forEach(ch => data[ch.id] = ch.checked);
+      localStorage.setItem(KEY, JSON.stringify(data));
+    }
+    trackers.forEach(ch => ch.addEventListener('change', saveTracker));
+    loadTracker();
+
+    // Goal storage
+    const GOAL_KEY = 'jp_plan_goal_minutes_v1';
+    const goalInput = document.getElementById('goalMinutes');
+    const goalOut = document.getElementById('goalOut');
+
+    function loadGoal(){
+      const v = localStorage.getItem(GOAL_KEY);
+      if (v){
+        goalOut.textContent = v + ' min/day';
+        if (goalInput) goalInput.value = v;
+      }
+    }
+    document.getElementById('saveGoal')?.addEventListener('click', () => {
+      const v = (goalInput.value || '').trim();
+      if (!v) return;
+      localStorage.setItem(GOAL_KEY, v);
+      loadGoal();
+    });
+    loadGoal();
+
+    // Reset
+    document.getElementById('resetBtn')?.addEventListener('click', () => {
+      localStorage.removeItem(KEY);
+      localStorage.removeItem(GOAL_KEY);
+      trackers.forEach(ch => ch.checked = false);
+      goalOut.textContent = 'Not set';
+      if (goalInput) goalInput.value = '';
+    });
+
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
