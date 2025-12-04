@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Как выучить английский — понимание прежде всего</title>
+
+  <!-- Bootstrap 5.0.2 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  <style>
+    :root{
+      --bg1:#0b1220;
+      --bg2:#0f1b34;
+      --text:#eaf0ff;
+      --muted:#a9b7da;
+      --accent:#7c5cff;
+      --accent2:#15c39a;
+      --danger:#ff5c7a;
+      --border: rgba(255,255,255,.10);
+      --shadow: 0 12px 30px rgba(0,0,0,.45);
+    }
+    body{
+      background:
+        radial-gradient(1200px 700px at 10% 10%, rgba(124,92,255,.25), transparent 60%),
+        radial-gradient(1000px 600px at 90% 20%, rgba(21,195,154,.18), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .navbar{
+      background: rgba(10,16,30,.75) !important;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero{ padding: 4.2rem 0 2.6rem; }
+    .badge-soft{
+      background: rgba(124,92,255,.18);
+      border: 1px solid rgba(124,92,255,.35);
+      color: var(--text);
+    }
+    .card-glass{
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 1.25rem;
+    }
+    .card-solid{
+      background: rgba(15,26,46,.85);
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 24px rgba(0,0,0,.35);
+      border-radius: 1.25rem;
+    }
+    .muted{ color: var(--muted); }
+
+    .btn-accent{
+      background: linear-gradient(135deg, var(--accent), #9a7bff);
+      border: none;
+      color: white;
+      box-shadow: 0 10px 22px rgba(124,92,255,.25);
+    }
+    .btn-accent:hover{ filter: brightness(1.05); }
+
+    .btn-accent2{
+      background: linear-gradient(135deg, var(--accent2), #34d6b1);
+      border: none;
+      color: #072018;
+      box-shadow: 0 10px 22px rgba(21,195,154,.18);
+      font-weight: 700;
+    }
+    .btn-accent2:hover{ filter: brightness(1.05); }
+
+    .btn-danger-soft{
+      background: rgba(255,92,122,.14);
+      border: 1px solid rgba(255,92,122,.30);
+      color: var(--text);
+    }
+
+    .pill{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      border-radius: 999px;
+      padding: .35rem .65rem;
+      display: inline-flex;
+      gap: .45rem;
+      align-items: center;
+      font-size: .92rem;
+      color: var(--muted);
+    }
+
+    .step-num{
+      width: 36px; height: 36px;
+      border-radius: 12px;
+      display: grid; place-items: center;
+      background: rgba(124,92,255,.18);
+      border: 1px solid rgba(124,92,255,.35);
+      font-weight: 800;
+      color: var(--text);
+      flex: 0 0 auto;
+    }
+
+    .section{ padding: 2.1rem 0; }
+
+    .divider{
+      height: 1px;
+      background: var(--border);
+      margin: 1.4rem 0;
+    }
+
+    .link-card{
+      text-decoration: none;
+      color: inherit;
+      transition: transform .12s ease, filter .12s ease;
+      display: block;
+    }
+    .link-card:hover{
+      transform: translateY(-2px);
+      filter: brightness(1.04);
+      color: inherit;
+    }
+
+    .mini{ font-size: .92rem; }
+
+    .kbdish{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      border-radius: .6rem;
+      padding: .2rem .45rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: .9rem;
+      color: var(--text);
+    }
+
+    footer{
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+      color: var(--muted);
+    }
+
+    .callout{
+      border-left: 4px solid rgba(21,195,154,.75);
+      background: rgba(21,195,154,.10);
+    }
+    .dangerline{
+      border-left: 4px solid rgba(255,92,122,.85);
+      background: rgba(255,92,122,.10);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAV -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#top">EN План</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"
+              aria-controls="nav" aria-expanded="false" aria-label="Меню">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="nav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#start">Старт</a></li>
+          <li class="nav-item"><a class="nav-link" href="#rules">Принципы</a></li>
+          <li class="nav-item"><a class="nav-link" href="#secret">Секрет</a></li>
+          <li class="nav-item"><a class="nav-link" href="#routine">Режим</a></li>
+          <li class="nav-item"><a class="nav-link" href="#sources">Материалы</a></li>
+          <li class="nav-item"><a class="nav-link" href="#level">Уровень</a></li>
+          <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header id="top" class="hero">
+    <div class="container">
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-7">
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <span class="badge rounded-pill badge-soft px-3 py-2">Понимание прежде всего</span>
+            <span class="badge rounded-pill badge-soft px-3 py-2">Копируем детей 👶</span>
+            <span class="badge rounded-pill badge-soft px-3 py-2">Подходит телефон/планшет/ПК</span>
+          </div>
+
+          <h1 class="display-5 fw-bold lh-1 mb-3">
+            Английский станет легче, когда вы начнёте <span style="color: var(--accent2)">больше понимать</span>.
+          </h1>
+
+          <p class="lead muted mb-4">
+            Главная цель — не “знать правила”, а увеличивать процент понимания.
+            Чем больше вы понимаете сейчас, тем быстрее растёт понимание дальше — как цепная реакция 🔗📈
+          </p>
+
+          <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-accent btn-lg px-4" href="#start">Начать план</a>
+            <a class="btn btn-outline-light btn-lg px-4" href="#sources">Открыть материалы</a>
+          </div>
+
+          <div class="mt-4 d-flex flex-wrap gap-2">
+            <span class="pill">✅ 60–80% понимания = идеальный уровень</span>
+            <span class="pill">✅ Повтор = ускоритель</span>
+            <span class="pill">✅ Без стресса = быстрее</span>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="card card-glass p-4">
+            <h5 class="fw-bold mb-2">Сначала — короткий документ про идею “естественного усвоения”</h5>
+            <p class="muted mb-3">
+              Прочитайте “весёлый” документ, чтобы понять, почему работает подход “понятного входа” и почему язык
+              надо “впитывать”, а не “зубрить”.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+              <!-- позже вставишь реальную ссылку на файл -->
+              <a class="btn btn-accent2 px-3" href="#doc">Открыть документ (скоро)</a>
+              <a class="btn btn-outline-light px-3" href="#rules">Сразу к принципам</a>
+            </div>
+            <div class="divider"></div>
+            <div class="mini muted">
+              Подсказка: если где-то тяжело — не “терпи”, а делай материал проще.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- START -->
+  <section id="start" class="section">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="card card-solid p-4 h-100">
+            <div class="d-flex gap-3 align-items-start">
+              <div class="step-num">1</div>
+              <div>
+                <h4 class="fw-bold mb-1">Цель №1 — поднять понимание 📈🧠</h4>
+                <p class="muted mb-3">
+                  Всё начинается с понимания на слух и в тексте. Чем больше вы понимаете, тем проще понимать ещё больше.
+                  Это реально “цепная реакция”.
+                </p>
+                <ul class="muted mb-0">
+                  <li>Слушайте и читайте то, что вы понимаете хотя бы частично</li>
+                  <li>Не гонитесь за сложным — гонитесь за понятным</li>
+                  <li>Повторяйте одно и то же — так мозг ускоряется</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card card-solid p-4 h-100">
+            <div class="d-flex gap-3 align-items-start">
+              <div class="step-num">2</div>
+              <div>
+                <h4 class="fw-bold mb-1">Слова “идут комплектами” 🧩🗨</h4>
+                <p class="muted mb-3">
+                  Слово почти всегда живёт рядом с другими словами: в фразах, сценах, ситуациях, повторяющихся шаблонах.
+                  Поэтому лучше учить не “слово = перевод”, а “фраза/контекст = смысл”.
+                </p>
+                <ul class="muted mb-0">
+                  <li>Слышите связку слов → мозг запоминает быстрее</li>
+                  <li>Одинаковые фразы встречаются снова и снова</li>
+                  <li>Контекст делает смысл очевидным</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-12">
+          <div class="card card-glass p-4 callout">
+            <h4 class="fw-bold mb-1">Не нужно понимать 100% сразу 🤔➡️😊</h4>
+            <div class="muted">
+              Нормально, что поначалу “плывёт”. Понимание улучшается автоматически, если вы каждый день
+              получаете понятный вход и повторяете его. Ваша задача — держаться в зоне <b>60–80%</b>.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PRINCIPLES -->
+  <section id="rules" class="section">
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-3">
+        <div>
+          <h2 class="fw-bold mb-1">Почему это работает (коротко и по делу)</h2>
+          <p class="muted mb-0">Самое важное: “понятный вход”, низкий стресс, постепенное усложнение.</p>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="card card-solid p-4 h-100">
+            <h5 class="fw-bold">📥 Понятный вход (i+1)</h5>
+            <p class="muted mb-0">
+              Материал должен быть чуть сложнее вашего уровня, но всё ещё понятным. Так язык “встраивается” сам.
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card card-solid p-4 h-100">
+            <h5 class="fw-bold">😌 Меньше стресса = больше прогресса</h5>
+            <p class="muted mb-0">
+              Страх ошибок и напряжение тормозят. Мы учим через комфорт и повторение.
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card card-solid p-4 h-100">
+            <h5 class="fw-bold">🌱 Естественный порядок</h5>
+            <p class="muted mb-0">
+              Грамматика усваивается постепенно и “сама по себе”, когда вы много слышите и читаете.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="card card-glass p-4 dangerline">
+            <h5 class="fw-bold mb-2">👀📺🎧 Важно: НЕЛЬЗЯ субтитры</h5>
+            <div class="muted">
+              Субтитры превращают просмотр в чтение (и мозг перестаёт тренировать слух).
+              Если тяжело — выбирайте <b>проще материал</b>, а не включайте субтитры.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECRET -->
+  <section id="secret" class="section">
+    <div class="container">
+      <h2 class="fw-bold mb-2">❗Секрет языка: копируем детей</h2>
+      <p class="muted mb-4">
+        Дети не “учат правила”. Они слушают, понимают по ситуации, ловят повторяющиеся фразы — и язык собирается сам.
+        Наша задача — сделать то же самое, только осознаннее и быстрее 🚀
+      </p>
+
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="card card-glass p-4 h-100">
+            <h5 class="fw-bold">Задача</h5>
+            <p class="muted mb-0">
+              Окружить себя материалами на английском, которые вы понимаете на <b>60–80%</b> 🎧📚
+              Это идеальная зона: вы понимаете смысл и одновременно “подбираете” новое.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card card-glass p-4 h-100">
+            <h5 class="fw-bold">Как понять, что уровень правильный?</h5>
+            <ul class="muted mb-0">
+              <li><b>Зелёный</b>: понимаете основную идею → продолжайте</li>
+              <li><b>Жёлтый</b>: понимаете кусками → повторите/замедлитесь</li>
+              <li><b>Красный</b>: почти ничего не ясно → берите проще</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROUTINE -->
+  <section id="routine" class="section">
+    <div class="container">
+      <h2 class="fw-bold mb-2">Режим (15–45 минут в день)</h2>
+      <p class="muted mb-4">Коротко, регулярно, с повтором — и вы удивитесь скорости прогресса.</p>
+
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="card card-solid p-4 h-100">
+            <h5 class="fw-bold">15 минут (минимум)</h5>
+            <ul class="muted mb-0">
+              <li>10 мин понятный Listening/TPRS</li>
+              <li>5 мин лёгкое чтение (Readable)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card card-solid p-4 h-100">
+            <h5 class="fw-bold">30 минут (лучший вариант)</h5>
+            <ul class="muted mb-0">
+              <li>15 мин TPRS/мультик (без субтитров)</li>
+              <li>10 мин чтение (Readable)</li>
+              <li>5 мин “детский” тренажёр чтения (DUO ABC)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card card-solid p-4 h-100">
+            <h5 class="fw-bold">45 минут (быстрый рост)</h5>
+            <ul class="muted mb-0">
+              <li>20 мин видео/мультик (повтор одной сцены)</li>
+              <li>15 мин чтение (простые истории)</li>
+              <li>10 мин повтор фраз вслух (без “задушивания” грамматикой)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="card card-glass p-4">
+            <h5 class="fw-bold mb-2">Правило повтора 🔁 (самый сильный буст)</h5>
+            <div class="muted">
+              Не гонитесь за “новым каждый день”. Выберите 1 видео/сцену/историю и повторяйте,
+              пока оно не станет лёгким. Тогда мозг начинает узнавать слова “автоматом”.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOURCES -->
+  <section id="sources" class="section">
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-3">
+        <div>
+          <h2 class="fw-bold mb-1">Крутые приложения и активности (чтобы самим не копаться) 📚🎧</h2>
+          <p class="muted mb-0">Открывайте и сразу используйте. Главное — выбрать уровень “60–80%”.</p>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Readable -->
+        <div class="col-lg-6">
+          <div class="card card-solid p-4 h-100">
+            <div class="d-flex justify-content-between align-items-start gap-3">
+              <div>
+                <h4 class="fw-bold mb-1">Readable (чтение + адаптация текста) 📖</h4>
+                <p class="muted mb-3">Подходит для ежедневного чтения маленькими порциями.</p>
+                <div class="d-flex flex-wrap gap-2">
+                  <a class="btn btn-accent2 px-3" target="_blank" rel="noopener"
+                     href="https://play.google.com/store/search?q=readable&c=apps&hl=en">Android ↗</a>
+                  <a class="btn btn-outline-light px-3" target="_blank" rel="noopener"
+                     href="https://apps.apple.com/ru/app/readable-%D0%B0%D0%BD%D0%B3%D0%BB%D0%B8%D0%B9%D1%81%D0%BA%D0%B8%D0%B5-%D0%B8%D1%81%D1%82%D0%BE%D1%80%D0%B8%D0%B8/id1556644199">iPhone ↗</a>
+                  <a class="btn btn-outline-light px-3" target="_blank" rel="noopener"
+                     href="https://readable.app/en">Сайт ↗</a>
+                </div>
+              </div>
+              <span class="badge rounded-pill badge-soft px-3 py-2">Чтение</span>
+            </div>
+            <div class="divider"></div>
+            <div class="mini muted">Лучше 10 минут каждый день, чем 1 час раз в неделю.</div>
+          </div>
+        </div>
+
+        <!-- DUO ABC -->
+        <div class="col-lg-6">
+          <div class="card card-solid p-4 h-100">
+            <div class="d-flex justify-content-between align-items-start gap-3">
+              <div>
+                <h4 class="fw-bold mb-1">DUO ABC (тренажёр чтения) 🧠🔤</h4>
+                <p class="muted mb-3">Идеально, если нужно “разогнать” базовое чтение легко и без стресса.</p>
+                <div class="d-flex flex-wrap gap-2">
+                  <a class="btn btn-accent2 px-3" target="_blank" rel="noopener"
+                     href="https://play.google.com/store/search?q=duo%20abc&c=apps&hl=ru">Android ↗</a>
+                  <a class="btn btn-outline-light px-3" target="_blank" rel="noopener"
+                     href="https://apps.apple.com/us/app/learn-to-read-duolingo-abc/id1440502568">iPhone ↗</a>
+                  <a class="btn btn-outline-light px-3" target="_blank" rel="noopener"
+                     href="https://abc.duolingo.com/">Сайт ↗</a>
+                </div>
+              </div>
+              <span class="badge rounded-pill badge-soft px-3 py-2">База</span>
+            </div>
+            <div class="divider"></div>
+            <div class="mini muted">Задача — не “учить правила”, а научиться быстро узнавать слова глазами.</div>
+          </div>
+        </div>
+
+        <!-- TPRS beginners -->
+        <div class="col-lg-6">
+          <a class="link-card" target="_blank" rel="noopener"
+             href="https://www.youtube.com/watch?v=31AtaK035JQ&list=PLqE81DRO-TpEdaIQaWdMgDjNHihgC56nl&ab_channel=EnglishComprehensibleInputforESLBeginners">
+            <div class="card card-solid p-4 h-100">
+              <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                  <h4 class="fw-bold mb-1">TPRS / Comprehensible Input (для начинающих) 🎧📺</h4>
+                  <p class="muted mb-3">Смотрите и повторяйте один ролик, пока он не станет “лёгким”.</p>
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="pill">✅ Понятный вход</span>
+                    <span class="pill">🔁 Повтор</span>
+                    <span class="pill">🚫 Без субтитров</span>
+                  </div>
+                </div>
+                <span class="badge rounded-pill badge-soft px-3 py-2">Открыть ↗</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Peppa Pig -->
+        <div class="col-lg-6">
+          <a class="link-card" target="_blank" rel="noopener"
+             href="https://www.youtube.com/watch?v=WOkE3j6p35Y&list=PLFEgnf4tmQe_YHkXH2p7X-dqnBzR0FIJn&ab_channel=PeppaPig-OfficialChannel">
+            <div class="card card-solid p-4 h-100">
+              <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                  <h4 class="fw-bold mb-1">🐖 Peppa Pig (официальный канал) — лёгкий listening</h4>
+                  <p class="muted mb-3">Хорошо для привычки слушать каждый день. Берите маленькие сцены.</p>
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="pill">🎬 Мульт</span>
+                    <span class="pill">🔁 Сцены</span>
+                    <span class="pill">🚫 Без субтитров</span>
+                  </div>
+                </div>
+                <span class="badge rounded-pill badge-soft px-3 py-2">Открыть ↗</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Advanced channel -->
+        <div class="col-lg-6">
+          <a class="link-card" target="_blank" rel="noopener"
+             href="https://www.youtube.com/watch?v=1qV9DwMOGbI&ab_channel=MSApreviouslyMyStoryAnimated">
+            <div class="card card-solid p-4 h-100">
+              <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                  <h4 class="fw-bold mb-1">Продвинутый “TPRS-стиль” канал 🎥</h4>
+                  <p class="muted mb-3">Когда базовые видео становятся слишком лёгкими — добавляйте разнообразие.</p>
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="pill">📈 Выше уровень</span>
+                    <span class="pill">🗣️ Фразы</span>
+                    <span class="pill">🔁 Повтор</span>
+                  </div>
+                </div>
+                <span class="badge rounded-pill badge-soft px-3 py-2">Открыть ↗</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Avatar -->
+        <div class="col-lg-6">
+          <a class="link-card" target="_blank" rel="noopener"
+             href="https://m.wcostream.tv/anime/avatar-the-last-airbender-book-1-water">
+            <div class="card card-solid p-4 h-100">
+              <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                  <h4 class="fw-bold mb-1">Avatar: The Last Airbender 🌍💧🔥🌬</h4>
+                  <p class="muted mb-3">
+                    Мотивационный вариант. Можно смотреть сценами и повторять.
+                    (Если тяжело — вернитесь к более простому TPRS.)
+                  </p>
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="pill">🎬 Сериал</span>
+                    <span class="pill">🔁 Сцены</span>
+                    <span class="pill">📌 По уровню</span>
+                  </div>
+                </div>
+                <span class="badge rounded-pill badge-soft px-3 py-2">Открыть ↗</span>
+              </div>
+              <div class="divider"></div>
+              <div class="mini muted">Если сайт неудобен — просто используйте как “источник”, а не как идеальную платформу.</div>
+            </div>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- LEVEL -->
+  <section id="level" class="section">
+    <div class="container">
+      <div class="card card-glass p-4">
+        <div class="row g-3 align-items-center">
+          <div class="col-lg-8">
+            <h2 class="fw-bold mb-1">Проверить свой уровень</h2>
+            <p class="muted mb-0">
+              Здесь будет тест (позже). Он покажет уровень и автоматически предложит: какие активности делать,
+              какие мультики смотреть и что лучше слушать именно на вашем уровне.
+            </p>
+          </div>
+          <div class="col-lg-4 text-lg-end d-flex flex-wrap justify-content-lg-end gap-2">
+            <a class="btn btn-accent btn-lg px-4" href="#">Проверить свой уровень</a>
+            <a class="btn btn-danger-soft btn-lg px-4" href="#sources">Сначала выбрать материалы</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div id="doc" class="card card-solid p-4">
+        <h5 class="fw-bold mb-2">Документ про Natural Approach (NA) — сюда вставите ссылку</h5>
+        <p class="muted mb-0">
+          Когда вы загрузите документ на сайт/диск, просто замените ссылку кнопки “Открыть документ (скоро)” наверху
+          на реальный URL.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section">
+    <div class="container">
+      <h2 class="fw-bold mb-3">FAQ</h2>
+
+      <div class="accordion" id="faqAcc">
+        <div class="accordion-item bg-transparent border-0">
+          <h2 class="accordion-header" id="q1">
+            <button class="accordion-button collapsed"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#a1" aria-expanded="false" aria-controls="a1"
+                    style="background: rgba(255,255,255,.06); color: var(--text); border: 1px solid var(--border); border-radius: 1rem;">
+              Что делать, если “ничего не понимаю”?
+            </button>
+          </h2>
+          <div id="a1" class="accordion-collapse collapse" aria-labelledby="q1" data-bs-parent="#faqAcc">
+            <div class="accordion-body muted">
+              Это значит, что материал слишком сложный. Возьмите проще, короче, медленнее. Ваша зона — 60–80% понимания.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item bg-transparent border-0 mt-3">
+          <h2 class="accordion-header" id="q2">
+            <button class="accordion-button collapsed"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#a2" aria-expanded="false" aria-controls="a2"
+                    style="background: rgba(255,255,255,.06); color: var(--text); border: 1px solid var(--border); border-radius: 1rem;">
+              Можно ли “чуть-чуть” субтитры?
+            </button>
+          </h2>
+          <div id="a2" class="accordion-collapse collapse" aria-labelledby="q2" data-bs-parent="#faqAcc">
+            <div class="accordion-body muted">
+              По этому плану — нет. Если хочется субтитры, значит материал не по уровню. Наша цель — тренировать слух и понимание без костылей.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item bg-transparent border-0 mt-3">
+          <h2 class="accordion-header" id="q3">
+            <button class="accordion-button collapsed"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#a3" aria-expanded="false" aria-controls="a3"
+                    style="background: rgba(255,255,255,.06); color: var(--text); border: 1px solid var(--border); border-radius: 1rem;">
+              А грамматику вообще не учить?
+            </button>
+          </h2>
+          <div id="a3" class="accordion-collapse collapse" aria-labelledby="q3" data-bs-parent="#faqAcc">
+            <div class="accordion-body muted">
+              Учить можно, но она не должна быть “двигателем прогресса”. Двигатель — понятный вход + повтор. Грамматика — как мелкая настройка.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item bg-transparent border-0 mt-3">
+          <h2 class="accordion-header" id="q4">
+            <button class="accordion-button collapsed"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#a4" aria-expanded="false" aria-controls="a4"
+                    style="background: rgba(255,255,255,.06); color: var(--text); border: 1px solid var(--border); border-radius: 1rem;">
+              Как понять, что я реально вырос?
+            </button>
+          </h2>
+          <div id="a4" class="accordion-collapse collapse" aria-labelledby="q4" data-bs-parent="#faqAcc">
+            <div class="accordion-body muted">
+              Пересмотрите ролик, который раньше был сложным. Если теперь он ощущается проще и вы ловите больше смысла — вы выросли.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div>© <span id="year"></span> План английского — понимание → повтор → рост.</div>
+        <div class="mini">Bootstrap 5.0.2 • Адаптивно для телефона/планшета/ПК</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS bundle 5.0.2 -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+  <script>
+    // Плавная навигация + закрытие меню на телефоне
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const id = a.getAttribute('href');
+        if (!id || id === '#') return;
+        const el = document.querySelector(id);
+        if (!el) return;
+        e.preventDefault();
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        const nav = document.getElementById('nav');
+        if (nav && nav.classList.contains('show')) {
+          bootstrap.Collapse.getOrCreateInstance(nav).hide();
+        }
+      });
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
