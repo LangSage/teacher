@@ -1,0 +1,921 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>English Level Check → Best Cartoons (Saved)</title>
+  <meta name="description" content="One-by-one English test (no translation). Meaning + short reading comprehension. No math/counting/logic puzzles. After the test: watching rules + 10+ cartoons. Result is saved." />
+
+  <!-- Better font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.0.2 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  <style>
+    :root{
+      --bg1:#0b1220; --bg2:#0f1b32;
+      --line:rgba(148,163,184,.22);
+      --text:#e5e7eb; --muted:#94a3b8;
+      --accent:#22c55e; --accent2:#60a5fa;
+      --shadow: 0 12px 30px rgba(0,0,0,.25);
+      --radius: 18px;
+    }
+    html{scroll-behavior:smooth}
+    body{
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 800px at 10% 0%, rgba(96,165,250,.14), transparent 55%),
+        radial-gradient(900px 700px at 100% 10%, rgba(34,197,94,.12), transparent 52%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      color: var(--text);
+    }
+    .navbar{
+      backdrop-filter: blur(10px);
+      background: rgba(11,18,32,.72)!important;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand-dot{
+      width:12px;height:12px;border-radius:999px;
+      background: linear-gradient(135deg, var(--accent), rgba(96,165,250,.85));
+      display:inline-block;margin-right:10px;box-shadow:0 0 0 4px rgba(34,197,94,.10);
+    }
+    .hero-card{
+      background: linear-gradient(180deg, rgba(15,23,42,.78), rgba(15,23,42,.62));
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 6px);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero-card:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 260px at 15% 10%, rgba(34,197,94,.20), transparent 60%),
+        radial-gradient(700px 260px at 85% 0%, rgba(96,165,250,.18), transparent 60%);
+      pointer-events:none;
+    }
+    .hero-inner{ position:relative; padding: 16px; }
+
+    .card-x{
+      background: rgba(15,23,42,.68);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 22px rgba(0,0,0,.18);
+    }
+    .muted{ color: var(--muted); }
+    .tiny{ font-size:.95rem; }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:.5rem;
+      padding: .35rem .7rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(2,6,23,.35);
+      color: var(--muted);
+      font-size:.92rem;
+      margin-right:.4rem;
+      margin-bottom:.4rem;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .pill b{ color: var(--text); font-weight:900; }
+
+    .btn-accent{
+      background: linear-gradient(135deg, rgba(34,197,94,.95), rgba(96,165,250,.85));
+      border: 0;
+      color: #0b1220;
+      font-weight: 950;
+      box-shadow: 0 10px 22px rgba(34,197,94,.18);
+    }
+    .btn-accent:hover{ filter: brightness(1.05); color:#0b1220; }
+    .btn-soft{
+      background: rgba(2,6,23,.35);
+      border: 1px solid var(--line);
+      color: var(--text);
+      font-weight: 850;
+    }
+    .btn-soft:hover{ background: rgba(2,6,23,.55); color: var(--text); }
+
+    .progress{
+      height: 10px;
+      background: rgba(148,163,184,.16);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-bar{
+      background: linear-gradient(90deg, rgba(96,165,250,.95), rgba(34,197,94,.95));
+    }
+    .soft-line{ border-top:1px solid var(--line); }
+
+    .qwrap{
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(2,6,23,.30);
+      padding: 14px;
+    }
+    .badge-soft{
+      border:1px solid var(--line);
+      background: rgba(2,6,23,.35);
+      color: var(--text);
+      border-radius:999px;
+      padding:.25rem .6rem;
+      font-weight:950;
+    }
+    .badge-ok{ border-color: rgba(34,197,94,.35); }
+    .badge-mid{ border-color: rgba(245,158,11,.35); }
+    .badge-hard{ border-color: rgba(239,68,68,.35); }
+
+    .q-title{
+      font-weight: 950;
+      letter-spacing: .2px;
+      font-size: clamp(18px, 3.6vw, 22px);
+      line-height: 1.25;
+      margin: 0;
+    }
+    .q-sub{ color: var(--muted); font-size:.95rem; margin-top:6px; }
+
+    .story{
+      border: 1px solid rgba(148,163,184,.25);
+      background: rgba(15,23,42,.55);
+      border-radius: 16px;
+      padding: 12px 12px;
+      font-size: 1.03rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      margin-top: 10px;
+    }
+
+    .ans-btn{
+      width: 100%;
+      text-align: left;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      padding: 12px 14px;
+      font-weight: 850;
+      transition: transform .06s ease, filter .06s ease;
+    }
+    .ans-btn:hover{ filter: brightness(1.04); transform: translateY(-1px); }
+    .ans-btn:disabled{ opacity: .72; transform:none; }
+    .ans-correct{ border-color: rgba(34,197,94,.55)!important; background: rgba(34,197,94,.10)!important; }
+    .ans-wrong{ border-color: rgba(239,68,68,.55)!important; background: rgba(239,68,68,.10)!important; }
+
+    .note{
+      border: 1px dashed rgba(148,163,184,.35);
+      border-radius: 16px;
+      padding: 12px;
+      background: rgba(2,6,23,.24);
+    }
+
+    .show-card{
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(2,6,23,.30);
+      padding: 14px;
+      height: 100%;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .show-card .title{ font-weight:950; letter-spacing:.2px; line-height:1.15; }
+    .show-card .desc{ color: var(--muted); font-size:.95rem; margin:0; }
+
+    .toast-mini{
+      display:none;
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 18px;
+      z-index: 1000;
+      border: 1px solid var(--line);
+      background: rgba(2,6,23,.80);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+      max-width: min(92vw, 560px);
+      box-shadow: 0 12px 30px rgba(0,0,0,.28);
+      font-weight: 850;
+    }
+
+    @media (max-width: 576px){
+      .hero-inner{ padding: 14px; }
+      .ans-btn{ padding: 12px 12px; }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">
+        <span class="brand-dot"></span>
+        Level Check → Cartoons
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"
+              aria-controls="navMain" aria-expanded="false" aria-label="Menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navMain">
+        <div class="ms-auto d-flex gap-2 py-2 py-lg-0">
+          <button class="btn btn-soft btn-sm" id="btnShowSaved" type="button">Show saved</button>
+          <button class="btn btn-soft btn-sm" id="btnRestart" type="button">New test</button>
+          <button class="btn btn-soft btn-sm" id="btnClear" type="button">Clear cache</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-4">
+    <div class="hero-card mb-3">
+      <div class="hero-inner">
+        <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between">
+          <div>
+            <div class="pill">✅ <b>English only</b> (no translation)</div>
+            <div class="pill">📖 short texts + meaning</div>
+            <div class="pill">💾 saved result</div>
+          </div>
+          <button class="btn btn-accent" id="btnStart" type="button">Start</button>
+        </div>
+
+        <h1 class="h4 fw-bold mt-3 mb-1">One question at a time</h1>
+        <div class="muted tiny">
+          We measure understanding + vocabulary-in-context to recommend cartoons that feel 60–80% clear.
+        </div>
+
+        <div class="muted tiny mt-2" id="savedHint" style="display:none;"></div>
+
+        <div class="mt-3">
+          <div class="progress">
+            <div class="progress-bar" id="progressBar" style="width:0%"></div>
+          </div>
+          <div class="d-flex justify-content-between mt-2 tiny muted">
+            <div id="progressText">0/0</div>
+            <div id="accuracyText">accuracy: —</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEST -->
+    <div class="row g-3" id="testRow" style="display:none;">
+      <div class="col-12 col-lg-7">
+        <div class="card-x p-3 p-md-4">
+          <div class="d-flex justify-content-between align-items-start gap-2 flex-wrap">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <span class="badge-soft" id="diffBadge">difficulty: —</span>
+              <span class="badge-soft" id="typeBadge">type: —</span>
+            </div>
+            <button class="btn btn-soft btn-sm" id="btnSkip" type="button">I don’t know</button>
+          </div>
+
+          <hr class="soft-line my-3">
+
+          <div class="qwrap">
+            <p class="q-title" id="qTitle">—</p>
+            <div class="q-sub" id="qSub">—</div>
+            <div id="storyBox" class="story" style="display:none;"></div>
+          </div>
+
+          <div class="d-grid gap-2 mt-3" id="answersGrid"></div>
+
+          <div class="note mt-3">
+            <div class="fw-bold mb-1">Precision rule</div>
+            <div class="muted tiny mb-0">
+              If you’re not sure, hit “I don’t know”. Guessing will push you into cartoons that feel too hard.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-5">
+        <div class="card-x p-3 p-md-4">
+          <div class="fw-bold mb-2">Tip</div>
+          <div class="muted tiny mb-0">
+            The test adapts. If you answer correctly, it moves up; if not, it moves down.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="row g-3" id="resultRow" style="display:none;">
+      <div class="col-12">
+        <div class="card-x p-3 p-md-4">
+          <div class="d-flex justify-content-between align-items-end gap-2 flex-wrap">
+            <div>
+              <h2 class="h5 fw-bold mb-1">Your result</h2>
+              <div class="muted tiny" id="resultMeta">—</div>
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+              <button class="btn btn-soft" id="btnRetake" type="button">Retake</button>
+              <button class="btn btn-accent" id="btnSaveNow" type="button">Save</button>
+            </div>
+          </div>
+
+          <hr class="soft-line my-3">
+
+          <div class="row g-3 mb-3">
+            <div class="col-12 col-lg-4">
+              <div class="qwrap h-100">
+                <div class="fw-bold mb-1">Level</div>
+                <div class="h3 fw-bold mb-1" id="levelName">—</div>
+                <div class="muted tiny mb-0" id="levelExplain">—</div>
+              </div>
+            </div>
+            <div class="col-12 col-lg-4">
+              <div class="qwrap h-100">
+                <div class="fw-bold mb-1">Estimate</div>
+                <div class="h3 fw-bold mb-1" id="estimate">—</div>
+                <div class="muted tiny mb-0">This is for choosing cartoons.</div>
+              </div>
+            </div>
+            <div class="col-12 col-lg-4">
+              <div class="qwrap h-100">
+                <div class="fw-bold mb-1">Accuracy</div>
+                <div class="h3 fw-bold mb-1" id="finalAccuracy">—</div>
+                <div class="muted tiny mb-0" id="finalCount">—</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="note mb-3">
+            <div class="fw-bold mb-2">Watching rules (short)</div>
+            <div class="tiny">
+              • Watch without subtitles (subtitles = reading, not listening).<br>
+              • Target: 60–80% clear.<br>
+              • Too hard → go simpler. Too easy → harder.<br>
+              • Repeat the same episode 2–4 times.
+            </div>
+          </div>
+
+          <div class="fw-bold mb-2">Cartoons (10+)</div>
+          <div class="row g-3" id="recGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-mini" id="toastMini">—</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+          crossorigin="anonymous"></script>
+
+  <script>
+    // ============================
+    // CONFIG
+    // ============================
+    const KEY = "english_cartoon_levelcheck_v4_nomath";
+    const TOTAL_QUESTIONS = 22;
+
+    // Types:
+    // - CLOZE (meaning)
+    // - TEXT_Q (reading comprehension, NO counting)
+    // - INFER (tone/implication)
+    const BANK = [
+      // --- D1 CLOZE (meaning) ---
+      {d:1, type:"CLOZE", q:"I’m ___ . I want food.", a:"hungry", opts:["hungry","quiet","early","clean"]},
+      {d:1, type:"CLOZE", q:"Please ___ the door.", a:"open", opts:["open","drive","build","paint"]},
+      {d:1, type:"CLOZE", q:"It’s ___ outside. The sun is very bright.", a:"sunny", opts:["sunny","dirty","slow","tired"]},
+      {d:1, type:"CLOZE", q:"This bag is too ___ . I can lift it easily.", a:"light", opts:["light","deep","strong","sharp"]},
+
+      // --- D1 TEXT_Q (no math) ---
+      {d:1, type:"TEXT_Q",
+       story:`Tom is at the door. He cannot find his key.
+He looks in his pocket. Nothing.
+Then he checks his bag and smiles.`,
+       q:"Where was the key most likely?",
+       a:"In his bag.",
+       opts:["In his bag.","In the fridge.","On the roof.","In the car engine."]},
+
+      {d:1, type:"TEXT_Q",
+       story:`Anna is cold. She closes the window.
+Then she makes tea and sits near the heater.`,
+       q:"Why did Anna close the window?",
+       a:"Because she was cold.",
+       opts:["Because she was cold.","Because she was hungry.","Because it was too bright.","Because she was late."]},
+
+      // --- D2 CLOZE ---
+      {d:2, type:"CLOZE", q:"Can I ___ your pen for a minute?", a:"borrow", opts:["borrow","avoid","invent","measure"]},
+      {d:2, type:"CLOZE", q:"I didn’t go out because I felt ___ .", a:"sick", opts:["sick","plastic","silent","exact"]},
+      {d:2, type:"CLOZE", q:"He ___ his friend to the party.", a:"invited", opts:["invited","improved","decided","repaired"]},
+
+      // --- D2 TEXT_Q (no math) ---
+      {d:2, type:"TEXT_Q",
+       story:`Maya has three plants.
+She waters the tall one every day, the small one on Mondays, and the one with flowers only when it looks dry.
+Today is Wednesday, and all look normal.`,
+       q:"Which plant does Maya water today?",
+       a:"The tall plant.",
+       opts:["The tall plant.","The small plant.","The flower plant.","None of them."]},
+
+      {d:2, type:"TEXT_Q",
+       story:`Leo’s jacket is in one of three places: the chair, the sofa, or his backpack.
+He checked the chair—nothing.
+He never puts it on the sofa when it’s wet, and it rained today.`,
+       q:"Where is the jacket most likely?",
+       a:"In his backpack.",
+       opts:["On the sofa.","On the chair.","In his backpack.","In the fridge."]},
+
+      {d:2, type:"TEXT_Q",
+       story:`Grandpa drinks tea without sugar.
+He says, “If there’s lemon, I won’t add milk.”
+Today there is lemon.`,
+       q:"What will Grandpa add to his tea?",
+       a:"Lemon (and no milk).",
+       opts:["Sugar.","Milk.","Lemon (and no milk).","Salt."]},
+
+      // --- D3 CLOZE ---
+      {d:3, type:"CLOZE", q:"He refused the offer, ___ it was a great opportunity.", a:"although", opts:["although","because","since","so"]},
+      {d:3, type:"CLOZE", q:"Please ___ this email to your manager.", a:"forward", opts:["forward","freeze","float","forgive"]},
+      {d:3, type:"CLOZE", q:"I was tired; ___ , I finished the work.", a:"however", opts:["however","maybe","quietly","tomorrow"]},
+
+      // --- D3 TEXT_Q (no math) ---
+      {d:3, type:"TEXT_Q",
+       story:`Tom bought a cheap umbrella. It broke after one day.
+Now he wants to buy a stronger one, even if it costs more.`,
+       q:"What will Tom probably do next?",
+       a:"Buy a better umbrella.",
+       opts:["Buy a better umbrella.","Stop walking forever.","Throw away his shoes.","Call the museum."]},
+
+      {d:3, type:"TEXT_Q",
+       story:`Emma’s phone is on the table. She says, “I can’t find my phone.”
+Then she looks at the table and laughs.`,
+       q:"Why does Emma laugh?",
+       a:"Because the phone was in front of her.",
+       opts:[
+         "Because the phone was in front of her.",
+         "Because someone stole it.",
+         "Because the table is broken.",
+         "Because she dislikes phones."
+       ]},
+
+      // --- D4 INFER (tone/meaning) ---
+      {d:4, type:"INFER",
+       story:`A friend replies to a suggestion with: “Great, exactly what I needed 🙃.”
+Later, they publicly thank you but use a different idea you mentioned earlier.`,
+       q:"What was the tone of the first message?",
+       a:"Sarcastic / not truly positive.",
+       opts:["Very grateful and excited.","Sarcastic / not truly positive.","Confused and asking for help.","Neutral and factual."]},
+
+      {d:4, type:"INFER",
+       story:`A reviewer writes: “The plot moves like fog—everywhere and going nowhere.
+The language, however, cuts like glass.”`,
+       q:"What did the reviewer like and dislike?",
+       a:"Liked the writing style; disliked the plot.",
+       opts:["Liked the plot; disliked the language.","Liked the writing style; disliked the plot.","Disliked both.","Liked both."]},
+
+      // --- D4 TEXT_Q (no math) ---
+      {d:4, type:"TEXT_Q",
+       story:`The teacher posts two essays on her desk.
+One has a faint coffee ring near the title. The other smells like fresh printer ink.
+Earlier she said: “The student who usually emails drafts forgot a laptop today and printed at the library just before class.”`,
+       q:"Which essay likely belongs to that student?",
+       a:"The one that smells like fresh printer ink.",
+       opts:[
+         "The one with the coffee ring.",
+         "The one that smells like fresh printer ink.",
+         "Both essays.",
+         "Neither essay."
+       ]},
+
+      // --- D5 INFER (no math) ---
+      {d:5, type:"INFER",
+       story:`An email thread shows a complaint about a late delivery.
+The vendor replies right away with a replacement link.
+That afternoon, the customer posts a review saying: “No response from the seller.”`,
+       q:"What does this suggest about the review’s fairness?",
+       a:"It’s likely unfair or the customer ignored the reply.",
+       opts:[
+         "The review is definitely accurate.",
+         "The vendor replied too late.",
+         "It’s likely unfair or the customer ignored the reply.",
+         "The seller deleted the messages."
+       ]},
+
+      {d:5, type:"INFER",
+       story:`The cat always hides when it hears the vacuum.
+Today the vacuum stayed in the closet, yet the cat is under the bed and the floor is newly clean.
+The robot mop is quiet unless it gets stuck; then it makes a loud whir that sounds like a vacuum.`,
+       q:"What likely startled the cat?",
+       a:"The robot mop got stuck and made a loud whir.",
+       opts:["The vacuum was used for hours.","Thunder outside.","The robot mop got stuck and made a loud whir.","A dog barked once."]},
+
+      {d:5, type:"INFER",
+       story:`A traveler asks a local for a café that “doesn’t try too hard.”
+The local points to a place with no sign, a sleepy dog at the door, and mismatched chairs.
+The traveler posts photos of latte art and neon slogans from the spot across the street.`,
+       q:"Did the traveler follow the local’s advice?",
+       a:"No — they chose the opposite kind of place.",
+       opts:[
+         "Yes — the photos prove it.",
+         "No — they chose the opposite kind of place.",
+         "Yes — because there was a dog.",
+         "Not enough information."
+       ]},
+    ];
+
+    // 10+ per bucket
+    const CARTOONS = {
+      START: [
+        ["Pocoyo","Very clear + simple situations"],
+        ["Peppa Pig","Repetition + everyday topics"],
+        ["Daniel Tiger’s Neighborhood","Slow, educational speech"],
+        ["Dora the Explorer","Repeats a lot"],
+        ["Sesame Street","Short sketches"],
+        ["WordWorld","Very clear vocabulary"],
+        ["Fireman Sam","Clear pronunciation"],
+        ["Postman Pat","Predictable stories"],
+        ["Sarah & Duck","Calm pace"],
+        ["Paw Patrol","Simple action language"],
+        ["Bluey","Still easy, but more natural"],
+        ["Octonauts","Easy step up"],
+      ],
+      EASY: [
+        ["Ben & Holly’s Little Kingdom","A bit richer than Peppa"],
+        ["Curious George","Context helps a lot"],
+        ["Arthur","School topics"],
+        ["Mickey Mouse Clubhouse","Clear commands"],
+        ["Max & Ruby","Daily life"],
+        ["Bluey","Great for growth"],
+        ["Octonauts","Gentle vocabulary expansion"],
+        ["Dora the Explorer","Repetition"],
+        ["Peppa Pig","Finish the base to 80–90%"],
+        ["Sesame Street","Vocabulary in chunks"],
+        ["Paw Patrol","Strong base"],
+        ["Postman Pat","Predictable language"],
+      ],
+      MID: [
+        ["Avatar: The Last Airbender","Story + clear speech"],
+        ["Hilda","Good context, calmer pace"],
+        ["Steven Universe","A lot of context"],
+        ["Gravity Falls","Humor + story (sometimes fast)"],
+        ["Adventure Time","Different voices, but repetitive patterns"],
+        ["We Bare Bears","Modern everyday language"],
+        ["Phineas and Ferb","Faster, but formula repeats"],
+        ["Teen Titans Go!","Fast but short lines"],
+        ["The Dragon Prince","More dialogue, story-driven"],
+        ["How to Train Your Dragon (series)","More vocabulary"],
+        ["Kung Fu Panda (series)","Action but understandable"],
+        ["Regular Show","Bridge to adult speech"],
+      ],
+      HARD: [
+        ["The Simpsons","References + speed"],
+        ["Futurama","Jokes + tech words"],
+        ["Family Guy","Fast + references"],
+        ["South Park","Slang + character voices"],
+        ["Disenchantment","Unusual humor"],
+        ["Bojack Horseman","Dialogue-heavy sarcasm"],
+        ["Rick and Morty","Very fast"],
+        ["Archer","Fast sarcasm"],
+        ["Arcane","Adult speech, fewer repeats"],
+        ["Invincible","Dialogue-heavy"],
+        ["Inside Job","Fast jokes"],
+        ["The Amazing World of Gumball","Humor + speed"],
+      ]
+    };
+
+    // ============================
+    // STATE
+    // ============================
+    const $ = (id) => document.getElementById(id);
+    let state = null;
+
+    function toast(msg){
+      const t = $("toastMini");
+      t.textContent = msg;
+      t.style.display = "block";
+      clearTimeout(toast._tm);
+      toast._tm = setTimeout(()=> t.style.display="none", 1500);
+    }
+    function shuffle(arr){
+      for (let i = arr.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+    function ytSearchUrl(title){
+      return "https://www.youtube.com/results?search_query=" + encodeURIComponent(title + " english full episodes");
+    }
+    function fmtDate(iso){
+      try{
+        const d = new Date(iso);
+        return d.toLocaleString("en-GB", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
+      }catch(e){ return ""; }
+    }
+    function closeNavIfOpen(){
+      const nav = $("navMain");
+      if (nav && nav.classList.contains("show")){
+        bootstrap.Collapse.getOrCreateInstance(nav).hide();
+      }
+    }
+
+    // ============================
+    // TEST (adaptive)
+    // ============================
+    function initTest(){
+      const bank = shuffle(BANK.map(q => ({...q, _asked:false})));
+      state = {
+        total: Math.min(TOTAL_QUESTIONS, bank.length),
+        asked: 0,
+        correct: 0,
+        ability: 50,
+        focus: 3,
+        bank,
+        locked: false,
+        current: null,
+        history: []
+      };
+      $("testRow").style.display = "";
+      $("resultRow").style.display = "none";
+      renderProgress();
+      nextQuestion();
+    }
+
+    function pickNext(){
+      const remaining = state.bank.filter(q => !q._asked);
+      if (!remaining.length) return null;
+      remaining.sort((a,b)=> Math.abs(a.d - state.focus) - Math.abs(b.d - state.focus));
+      return remaining[0];
+    }
+
+    function renderQuestion(q){
+      state.current = q;
+      state.locked = false;
+
+      $("diffBadge").textContent = "difficulty: " + "★".repeat(q.d) + "☆".repeat(5-q.d);
+      $("typeBadge").textContent =
+        "type: " + (q.type === "CLOZE" ? "choose word" : (q.type === "INFER" ? "inference" : "read & answer"));
+
+      $("qTitle").textContent = q.q;
+      $("qSub").textContent =
+        q.type === "CLOZE" ? "Choose the best word." :
+        q.type === "INFER" ? "Choose the best meaning." :
+        "Read the text and answer the question.";
+
+      if (q.story){
+        $("storyBox").style.display = "";
+        $("storyBox").textContent = q.story;
+      } else {
+        $("storyBox").style.display = "none";
+        $("storyBox").textContent = "";
+      }
+
+      const opts = shuffle(q.opts.slice());
+      const grid = $("answersGrid");
+      grid.innerHTML = "";
+      opts.forEach((opt, i)=>{
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "ans-btn";
+        btn.textContent = (i+1) + ") " + opt;
+        btn.addEventListener("click", ()=> answer(opt === q.a, btn));
+        grid.appendChild(btn);
+      });
+    }
+
+    function updateAbility(isCorrect, d, type){
+      let gain = 5 + d*2;
+      let loss = 6 + d*2;
+      if (type === "INFER"){ gain += 2; loss += 2; }
+      if (type === "TEXT_Q"){ gain += 1; loss += 1; }
+
+      state.ability = Math.max(0, Math.min(100, state.ability + (isCorrect ? gain : -loss)));
+      if (isCorrect && state.focus < 5) state.focus++;
+      if (!isCorrect && state.focus > 1) state.focus--;
+    }
+
+    function disableAnswers(){
+      $("answersGrid").querySelectorAll("button").forEach(b => b.disabled = true);
+    }
+
+    function answer(isCorrect, clicked){
+      if (state.locked) return;
+      state.locked = true;
+
+      const q = state.current;
+      disableAnswers();
+
+      // mark correct
+      $("answersGrid").querySelectorAll("button").forEach(btn=>{
+        const txt = btn.textContent.replace(/^\d+\)\s*/, "").trim();
+        if (txt === q.a) btn.classList.add("ans-correct");
+      });
+
+      if (isCorrect){
+        clicked.classList.add("ans-correct");
+        state.correct++;
+        toast("Correct ✅");
+      } else {
+        clicked.classList.add("ans-wrong");
+        toast("Wrong ❌");
+      }
+
+      q._asked = true;
+      state.asked++;
+      state.history.push({d:q.d, type:q.type, ok:isCorrect});
+      updateAbility(isCorrect, q.d, q.type);
+      renderProgress();
+
+      setTimeout(()=> nextQuestion(), 650);
+    }
+
+    function skip(){
+      if (!state || state.locked) return;
+      const q = state.current;
+
+      disableAnswers();
+      $("answersGrid").querySelectorAll("button").forEach(btn=>{
+        const txt = btn.textContent.replace(/^\d+\)\s*/, "").trim();
+        if (txt === q.a) btn.classList.add("ans-correct");
+      });
+
+      q._asked = true;
+      state.asked++;
+      state.history.push({d:q.d, type:q.type, ok:false, skip:true});
+      updateAbility(false, q.d, q.type);
+      renderProgress();
+
+      toast("Skipped");
+      setTimeout(()=> nextQuestion(), 650);
+    }
+
+    function nextQuestion(){
+      if (!state) return;
+      if (state.asked >= state.total){ finish(); return; }
+      const q = pickNext();
+      if (!q){ finish(); return; }
+      renderQuestion(q);
+    }
+
+    function renderProgress(){
+      if (!state){
+        $("progressText").textContent = "0/0";
+        $("accuracyText").textContent = "accuracy: —";
+        $("progressBar").style.width = "0%";
+        return;
+      }
+      $("progressText").textContent = state.asked + "/" + state.total;
+      const acc = state.asked ? Math.round((state.correct/state.asked)*100) : 0;
+      $("accuracyText").textContent = "accuracy: " + (state.asked ? acc + "%" : "—");
+      $("progressBar").style.width = Math.round((state.asked/state.total)*100) + "%";
+    }
+
+    // ============================
+    // RESULT
+    // ============================
+    function mapLevel(ability){
+      if (ability < 30) return {key:"START", name:"START", badge:"badge-ok", est:"Very basic comprehension", explain:"Use very simple cartoons with repetition."};
+      if (ability < 48) return {key:"EASY",  name:"EASY",  badge:"badge-ok", est:"Basic-to-low intermediate", explain:"Simple cartoons + clear speech."};
+      if (ability < 68) return {key:"MID",   name:"MID",   badge:"badge-mid", est:"Comfortable with many kids shows", explain:"Story-driven cartoons. Stay at 60–80% clear."};
+      return {key:"HARD", name:"HARD", badge:"badge-hard", est:"Ready for faster dialogue", explain:"More jokes, references, faster speech."};
+    }
+
+    function renderRecommendations(levelKey){
+      const list = CARTOONS[levelKey] || [];
+      const grid = $("recGrid");
+      grid.innerHTML = "";
+      list.slice(0, 12).forEach(([title, note])=>{
+        const col = document.createElement("div");
+        col.className = "col-12 col-md-6 col-xl-4";
+        col.innerHTML = `
+          <div class="show-card">
+            <div class="title">${title}</div>
+            <p class="desc">${note}</p>
+            <div class="d-flex gap-2 flex-wrap mt-auto">
+              <a class="btn btn-soft btn-sm" target="_blank" rel="noopener" href="${ytSearchUrl(title)}">Search on YouTube ↗</a>
+            </div>
+          </div>
+        `;
+        grid.appendChild(col);
+      });
+    }
+
+    function finish(){
+      const acc = state.asked ? Math.round((state.correct/state.asked)*100) : 0;
+      const level = mapLevel(state.ability);
+      const obj = {
+        savedAt: new Date().toISOString(),
+        ability: state.ability,
+        level,
+        asked: state.asked,
+        correct: state.correct,
+        accuracy: acc,
+        history: state.history
+      };
+      save(obj);
+      showResult(obj);
+    }
+
+    // ============================
+    // SAVE/LOAD
+    // ============================
+    function save(obj){
+      localStorage.setItem(KEY, JSON.stringify(obj));
+      $("savedHint").style.display = "block";
+      $("savedHint").textContent = "Saved: " + fmtDate(obj.savedAt);
+    }
+    function load(){
+      try{ return JSON.parse(localStorage.getItem(KEY)); }catch(e){ return null; }
+    }
+    function clearCache(){
+      localStorage.removeItem(KEY);
+      $("savedHint").style.display = "none";
+      toast("Cache cleared");
+    }
+
+    function showResult(obj){
+      $("testRow").style.display = "none";
+      $("resultRow").style.display = "";
+      $("btnStart").textContent = "Start";
+
+      $("resultMeta").textContent = "Saved: " + fmtDate(obj.savedAt);
+
+      $("levelName").textContent = obj.level.name;
+      $("levelName").className = "h3 fw-bold mb-1 " + obj.level.badge;
+      $("levelExplain").textContent = obj.level.explain;
+      $("estimate").textContent = obj.level.est;
+
+      $("finalAccuracy").textContent = obj.accuracy + "%";
+      $("finalCount").textContent = obj.correct + " / " + obj.asked;
+
+      renderRecommendations(obj.level.key);
+
+      $("progressText").textContent = obj.asked + "/" + obj.asked;
+      $("accuracyText").textContent = "accuracy: " + obj.accuracy + "%";
+      $("progressBar").style.width = "100%";
+    }
+
+    // ============================
+    // INIT
+    // ============================
+    (function init(){
+      const saved = load();
+      if (saved && saved.savedAt){
+        $("savedHint").style.display = "block";
+        $("savedHint").textContent = "Last saved: " + fmtDate(saved.savedAt);
+        showResult(saved);
+      } else {
+        renderProgress();
+      }
+
+      $("btnStart").addEventListener("click", ()=>{
+        closeNavIfOpen();
+        initTest();
+        toast("Go!");
+      });
+
+      $("btnSkip").addEventListener("click", skip);
+
+      $("btnRestart").addEventListener("click", ()=>{
+        closeNavIfOpen();
+        initTest();
+      });
+
+      $("btnRetake").addEventListener("click", ()=>{
+        initTest();
+        window.scrollTo({top:0, behavior:"smooth"});
+      });
+
+      $("btnSaveNow").addEventListener("click", ()=>{
+        const saved = load();
+        if (saved){
+          saved.savedAt = new Date().toISOString();
+          save(saved);
+          toast("Saved");
+        } else {
+          toast("Nothing to save yet");
+        }
+      });
+
+      $("btnShowSaved").addEventListener("click", ()=>{
+        closeNavIfOpen();
+        const saved = load();
+        if (!saved){ toast("No saved result"); return; }
+        showResult(saved);
+        window.scrollTo({top:0, behavior:"smooth"});
+      });
+
+      $("btnClear").addEventListener("click", ()=>{
+        closeNavIfOpen();
+        if (confirm("Clear saved result?")){
+          clearCache();
+          $("resultRow").style.display = "none";
+          $("testRow").style.display = "none";
+          renderProgress();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
