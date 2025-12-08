@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>English Level Check → Best Cartoons (Saved)</title>
-  <meta name="description" content="One-by-one English test (no translation). Meaning + short reading comprehension. No math/counting/logic puzzles. After the test: watching rules + 10+ cartoons. Result is saved." />
+  <title>English Level Check → Cartoons (Adaptive + Saved)</title>
+  <meta name="description" content="Computer-adaptive English test (one question at a time). No math/counting. Stops early when confidence is high. After the test: watching rules + 10+ cartoons for your level. Saves result." />
 
   <!-- Better font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,6 +21,7 @@
       --line:rgba(148,163,184,.22);
       --text:#e5e7eb; --muted:#94a3b8;
       --accent:#22c55e; --accent2:#60a5fa;
+      --danger:#ef4444;
       --shadow: 0 12px 30px rgba(0,0,0,.25);
       --radius: 18px;
     }
@@ -216,7 +217,7 @@
     <div class="container">
       <a class="navbar-brand fw-bold" href="#">
         <span class="brand-dot"></span>
-        Level Check → Cartoons
+        Adaptive Level Check → Cartoons
       </a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"
@@ -239,16 +240,17 @@
       <div class="hero-inner">
         <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between">
           <div>
-            <div class="pill">✅ <b>English only</b> (no translation)</div>
-            <div class="pill">📖 short texts + meaning</div>
+            <div class="pill">✅ <b>English only</b></div>
+            <div class="pill">🚫 <b>no math / no counting</b></div>
+            <div class="pill">🎯 stops early when <b>confidence</b> is high</div>
             <div class="pill">💾 saved result</div>
           </div>
           <button class="btn btn-accent" id="btnStart" type="button">Start</button>
         </div>
 
-        <h1 class="h4 fw-bold mt-3 mb-1">One question at a time</h1>
+        <h1 class="h4 fw-bold mt-3 mb-1">One question at a time (computer-adaptive)</h1>
         <div class="muted tiny">
-          We measure understanding + vocabulary-in-context to recommend cartoons that feel 60–80% clear.
+          The test adapts. It chooses the next question based on your current estimated level and stops early when it’s confident.
         </div>
 
         <div class="muted tiny mt-2" id="savedHint" style="display:none;"></div>
@@ -257,9 +259,10 @@
           <div class="progress">
             <div class="progress-bar" id="progressBar" style="width:0%"></div>
           </div>
-          <div class="d-flex justify-content-between mt-2 tiny muted">
+          <div class="d-flex justify-content-between mt-2 tiny muted flex-wrap gap-2">
             <div id="progressText">0/0</div>
             <div id="accuracyText">accuracy: —</div>
+            <div id="confText">confidence: —</div>
           </div>
         </div>
       </div>
@@ -271,8 +274,9 @@
         <div class="card-x p-3 p-md-4">
           <div class="d-flex justify-content-between align-items-start gap-2 flex-wrap">
             <div class="d-flex align-items-center gap-2 flex-wrap">
-              <span class="badge-soft" id="diffBadge">difficulty: —</span>
               <span class="badge-soft" id="typeBadge">type: —</span>
+              <span class="badge-soft" id="estBadge">estimate: —</span>
+              <span class="badge-soft" id="sdBadge">± —</span>
             </div>
             <button class="btn btn-soft btn-sm" id="btnSkip" type="button">I don’t know</button>
           </div>
@@ -290,7 +294,7 @@
           <div class="note mt-3">
             <div class="fw-bold mb-1">Precision rule</div>
             <div class="muted tiny mb-0">
-              If you’re not sure, hit “I don’t know”. Guessing will push you into cartoons that feel too hard.
+              If you’re not sure, hit “I don’t know”. The system will keep the cartoon recommendations in the right difficulty zone.
             </div>
           </div>
         </div>
@@ -298,9 +302,10 @@
 
       <div class="col-12 col-lg-5">
         <div class="card-x p-3 p-md-4">
-          <div class="fw-bold mb-2">Tip</div>
+          <div class="fw-bold mb-2">What makes this “adaptive”</div>
           <div class="muted tiny mb-0">
-            The test adapts. If you answer correctly, it moves up; if not, it moves down.
+            It tries to ask questions where you have ~50% chance (that’s where we learn your level fastest).
+            So you don’t need to answer all questions.
           </div>
         </div>
       </div>
@@ -333,9 +338,9 @@
             </div>
             <div class="col-12 col-lg-4">
               <div class="qwrap h-100">
-                <div class="fw-bold mb-1">Estimate</div>
-                <div class="h3 fw-bold mb-1" id="estimate">—</div>
-                <div class="muted tiny mb-0">This is for choosing cartoons.</div>
+                <div class="fw-bold mb-1">Confidence</div>
+                <div class="h3 fw-bold mb-1" id="finalConf">—</div>
+                <div class="muted tiny mb-0" id="finalSD">—</div>
               </div>
             </div>
             <div class="col-12 col-lg-4">
@@ -372,156 +377,200 @@
 
   <script>
     // ============================
-    // CONFIG
+    // ADAPTIVE ENGINE (Bayesian grid)
+    // - Each item has difficulty b on scale [-2.2..+2.2]
+    // - We keep a posterior over theta (ability) and pick next item near posterior mean
+    // - Stop early when posterior SD is small enough
     // ============================
-    const KEY = "english_cartoon_levelcheck_v4_nomath";
-    const TOTAL_QUESTIONS = 22;
 
-    // Types:
-    // - CLOZE (meaning)
-    // - TEXT_Q (reading comprehension, NO counting)
-    // - INFER (tone/implication)
-    const BANK = [
-      // --- D1 CLOZE (meaning) ---
-      {d:1, type:"CLOZE", q:"I’m ___ . I want food.", a:"hungry", opts:["hungry","quiet","early","clean"]},
-      {d:1, type:"CLOZE", q:"Please ___ the door.", a:"open", opts:["open","drive","build","paint"]},
-      {d:1, type:"CLOZE", q:"It’s ___ outside. The sun is very bright.", a:"sunny", opts:["sunny","dirty","slow","tired"]},
-      {d:1, type:"CLOZE", q:"This bag is too ___ . I can lift it easily.", a:"light", opts:["light","deep","strong","sharp"]},
+    const KEY = "english_cartoon_levelcheck_v5_adaptive";
+    const MIN_Q = 10;
+    const MAX_Q = 26;
+    const TARGET_SD = 0.38; // lower = more confident, more questions
+    const A = 1.35; // discrimination
 
-      // --- D1 TEXT_Q (no math) ---
-      {d:1, type:"TEXT_Q",
-       story:`Tom is at the door. He cannot find his key.
-He looks in his pocket. Nothing.
+    // Utility: make unique IDs easier to manage
+    const ITEM_BANK = [
+      // ===== VERY EASY (b ~ -2.0..-1.4) =====
+      {id:"e01", b:-2.0, type:"CLOZE", q:"I am ___.", a:"happy", opts:["happy","table","yellow","quickly"]},
+      {id:"e02", b:-1.9, type:"CLOZE", q:"Please ___ the door.", a:"open", opts:["open","swim","laugh","paper"]},
+      {id:"e03", b:-1.8, type:"CLOZE", q:"I drink ___.", a:"water", opts:["water","chair","blue","run"]},
+      {id:"e04", b:-1.8, type:"CLOZE", q:"It is ___ outside. The sun is bright.", a:"sunny", opts:["sunny","angry","heavy","late"]},
+      {id:"e05", b:-1.7, type:"TEXT_Q",
+        story:`Tom is at the door. He cannot find his key.
+He checks his pocket. Nothing.
 Then he checks his bag and smiles.`,
-       q:"Where was the key most likely?",
-       a:"In his bag.",
-       opts:["In his bag.","In the fridge.","On the roof.","In the car engine."]},
+        q:"Where was the key most likely?",
+        a:"In his bag.",
+        opts:["In his bag.","In the fridge.","On the roof.","In the sink."]},
+      {id:"e06", b:-1.7, type:"TEXT_Q",
+        story:`Anna feels cold. She closes the window.
+Then she makes tea.`,
+        q:"Why did Anna close the window?",
+        a:"Because she felt cold.",
+        opts:["Because she felt cold.","Because she was late.","Because she was hungry.","Because it was noisy music."]},
+      {id:"e07", b:-1.6, type:"CLOZE", q:"This bag is very ___. I can lift it easily.", a:"light", opts:["light","deep","busy","sweet"]},
+      {id:"e08", b:-1.5, type:"CLOZE", q:"I ___ with my friend after school.", a:"talk", opts:["talk","milk","green","push"]},
+      {id:"e09", b:-1.5, type:"TEXT_Q",
+        story:`Ben is thirsty. He looks at the empty bottle.
+He goes to the kitchen.`,
+        q:"What will Ben probably do?",
+        a:"Get a drink.",
+        opts:["Get a drink.","Go to sleep.","Buy a car.","Call the museum."]},
 
-      {d:1, type:"TEXT_Q",
-       story:`Anna is cold. She closes the window.
-Then she makes tea and sits near the heater.`,
-       q:"Why did Anna close the window?",
-       a:"Because she was cold.",
-       opts:["Because she was cold.","Because she was hungry.","Because it was too bright.","Because she was late."]},
-
-      // --- D2 CLOZE ---
-      {d:2, type:"CLOZE", q:"Can I ___ your pen for a minute?", a:"borrow", opts:["borrow","avoid","invent","measure"]},
-      {d:2, type:"CLOZE", q:"I didn’t go out because I felt ___ .", a:"sick", opts:["sick","plastic","silent","exact"]},
-      {d:2, type:"CLOZE", q:"He ___ his friend to the party.", a:"invited", opts:["invited","improved","decided","repaired"]},
-
-      // --- D2 TEXT_Q (no math) ---
-      {d:2, type:"TEXT_Q",
-       story:`Maya has three plants.
-She waters the tall one every day, the small one on Mondays, and the one with flowers only when it looks dry.
-Today is Wednesday, and all look normal.`,
-       q:"Which plant does Maya water today?",
-       a:"The tall plant.",
-       opts:["The tall plant.","The small plant.","The flower plant.","None of them."]},
-
-      {d:2, type:"TEXT_Q",
-       story:`Leo’s jacket is in one of three places: the chair, the sofa, or his backpack.
-He checked the chair—nothing.
-He never puts it on the sofa when it’s wet, and it rained today.`,
-       q:"Where is the jacket most likely?",
-       a:"In his backpack.",
-       opts:["On the sofa.","On the chair.","In his backpack.","In the fridge."]},
-
-      {d:2, type:"TEXT_Q",
-       story:`Grandpa drinks tea without sugar.
-He says, “If there’s lemon, I won’t add milk.”
+      // ===== EASY (b ~ -1.3..-0.6) =====
+      {id:"m01", b:-1.3, type:"CLOZE", q:"Can I ___ your pen?", a:"borrow", opts:["borrow","invent","repair","divide"]},
+      {id:"m02", b:-1.2, type:"CLOZE", q:"I didn’t go out because I felt ___.", a:"sick", opts:["sick","square","silent","exact"]},
+      {id:"m03", b:-1.1, type:"TEXT_Q",
+        story:`Mia looks for her phone.
+It is not in her bag.
+Then she sees it on the table.`,
+        q:"Where was the phone?",
+        a:"On the table.",
+        opts:["On the table.","In her shoe.","In the car.","In the mailbox."]},
+      {id:"m04", b:-1.0, type:"CLOZE", q:"He ___ his friend to the party.", a:"invited", opts:["invited","ignored","imagined","included"]},
+      {id:"m05", b:-0.9, type:"TEXT_Q",
+        story:`Grandpa drinks tea without sugar.
+He says: “If there’s lemon, I won’t add milk.”
 Today there is lemon.`,
-       q:"What will Grandpa add to his tea?",
-       a:"Lemon (and no milk).",
-       opts:["Sugar.","Milk.","Lemon (and no milk).","Salt."]},
+        q:"What will Grandpa add to his tea?",
+        a:"Lemon (and no milk).",
+        opts:["Sugar.","Milk.","Lemon (and no milk).","Salt."]},
+      {id:"m06", b:-0.9, type:"CLOZE", q:"This movie is ___. It makes me laugh.", a:"funny", opts:["funny","empty","final","modern"]},
+      {id:"m07", b:-0.8, type:"TEXT_Q",
+        story:`Ava forgets her umbrella.
+Outside, the sky is dark and windy.
+She decides to stay inside.`,
+        q:"Why does Ava stay inside?",
+        a:"Because it might rain.",
+        opts:["Because it might rain.","Because she loves wind.","Because it is too quiet.","Because she is at a museum."]},
+      {id:"m08", b:-0.7, type:"CLOZE", q:"Please ___ me a message when you arrive.", a:"send", opts:["send","lend","bend","hide"]},
+      {id:"m09", b:-0.6, type:"TEXT_Q",
+        story:`Leo’s jacket is not on the chair.
+He never puts it on the sofa when it’s wet, and it rained today.`,
+        q:"Where is the jacket most likely?",
+        a:"In his backpack.",
+        opts:["On the sofa.","On the chair.","In his backpack.","On the roof."]},
 
-      // --- D3 CLOZE ---
-      {d:3, type:"CLOZE", q:"He refused the offer, ___ it was a great opportunity.", a:"although", opts:["although","because","since","so"]},
-      {d:3, type:"CLOZE", q:"Please ___ this email to your manager.", a:"forward", opts:["forward","freeze","float","forgive"]},
-      {d:3, type:"CLOZE", q:"I was tired; ___ , I finished the work.", a:"however", opts:["however","maybe","quietly","tomorrow"]},
+      // ===== MID (b ~ -0.5..+0.5) =====
+      {id:"a01", b:-0.5, type:"CLOZE", q:"I was late, so I ___ a taxi.", a:"took", opts:["took","taught","torn","tied"]},
+      {id:"a02", b:-0.4, type:"CLOZE", q:"She apologized ___ being rude.", a:"for", opts:["for","to","at","by"]},
+      {id:"a03", b:-0.3, type:"TEXT_Q",
+        story:`Nora sees a “Closed” sign on the shop door.
+She checks her watch and says, “Oh, of course.”`,
+        q:"What is most likely true?",
+        a:"She arrived after closing time.",
+        opts:["She arrived after closing time.","She forgot her name.","The shop moved to another city.","The door is broken forever."]},
+      {id:"a04", b:-0.2, type:"CLOZE", q:"I’ll call you ___ I finish work.", a:"when", opts:["when","where","who","why"]},
+      {id:"a05", b:0.0, type:"TEXT_Q",
+        story:`Tom buys a cheap umbrella. It breaks quickly.
+Now he wants a stronger one, even if it costs more.`,
+        q:"What will Tom probably do next?",
+        a:"Buy a better umbrella.",
+        opts:["Buy a better umbrella.","Stop walking.","Call the police.","Throw away his shoes."]},
+      {id:"a06", b:0.1, type:"CLOZE", q:"He refused the offer, ___ it was a good deal.", a:"although", opts:["although","because","since","so"]},
+      {id:"a07", b:0.2, type:"TEXT_Q",
+        story:`Lina says, “I’m fine.”
+But her voice is shaky, and she avoids eye contact.`,
+        q:"What does this suggest?",
+        a:"She may not be fine.",
+        opts:["She may not be fine.","She is very hungry.","She is excited for a party.","She is reading a book."]},
+      {id:"a08", b:0.3, type:"CLOZE", q:"Please ___ this email to your manager.", a:"forward", opts:["forward","freeze","float","forgive"]},
+      {id:"a09", b:0.5, type:"TEXT_Q",
+        story:`The teacher posts two essays on her desk.
+One smells like fresh printer ink. The other has a faint coffee ring.
+She said: “The student who usually emails drafts forgot a laptop today and printed at the library just before class.”`,
+        q:"Which essay likely belongs to that student?",
+        a:"The one that smells like fresh printer ink.",
+        opts:["The one with the coffee ring.","The one that smells like fresh printer ink.","Both essays.","Neither essay."]},
 
-      // --- D3 TEXT_Q (no math) ---
-      {d:3, type:"TEXT_Q",
-       story:`Tom bought a cheap umbrella. It broke after one day.
-Now he wants to buy a stronger one, even if it costs more.`,
-       q:"What will Tom probably do next?",
-       a:"Buy a better umbrella.",
-       opts:["Buy a better umbrella.","Stop walking forever.","Throw away his shoes.","Call the museum."]},
-
-      {d:3, type:"TEXT_Q",
-       story:`Emma’s phone is on the table. She says, “I can’t find my phone.”
-Then she looks at the table and laughs.`,
-       q:"Why does Emma laugh?",
-       a:"Because the phone was in front of her.",
-       opts:[
-         "Because the phone was in front of her.",
-         "Because someone stole it.",
-         "Because the table is broken.",
-         "Because she dislikes phones."
-       ]},
-
-      // --- D4 INFER (tone/meaning) ---
-      {d:4, type:"INFER",
-       story:`A friend replies to a suggestion with: “Great, exactly what I needed 🙃.”
-Later, they publicly thank you but use a different idea you mentioned earlier.`,
-       q:"What was the tone of the first message?",
-       a:"Sarcastic / not truly positive.",
-       opts:["Very grateful and excited.","Sarcastic / not truly positive.","Confused and asking for help.","Neutral and factual."]},
-
-      {d:4, type:"INFER",
-       story:`A reviewer writes: “The plot moves like fog—everywhere and going nowhere.
+      // ===== UPPER (b ~ +0.6..+1.3) =====
+      {id:"u01", b:0.6, type:"CLOZE", q:"The results were unclear; ___ , we repeated the test.", a:"therefore", opts:["therefore","maybe","rarely","quietly"]},
+      {id:"u02", b:0.7, type:"TEXT_Q",
+        story:`After the meeting, the manager says, “That’s… bold,” and closes the laptop.
+No one speaks for a moment.`,
+        q:"What is the manager most likely implying?",
+        a:"They are not fully impressed / they are skeptical.",
+        opts:[
+          "They are not fully impressed / they are skeptical.",
+          "They are extremely happy and celebrating.",
+          "They did not hear the idea at all.",
+          "They want to buy a laptop."
+        ]},
+      {id:"u03", b:0.8, type:"CLOZE", q:"She was ___ to speak in public at first.", a:"reluctant", opts:["reluctant","relevant","regular","remote"]},
+      {id:"u04", b:0.9, type:"TEXT_Q",
+        story:`A traveler asks for a café that “doesn’t try too hard.”
+The local points to a place with no sign and mismatched chairs.
+The traveler goes to a neon place with fancy slogans.`,
+        q:"Did the traveler follow the advice?",
+        a:"No — they chose the opposite kind of place.",
+        opts:["Yes — clearly.","No — they chose the opposite kind of place.","Yes — because it had chairs.","Not enough information."]},
+      {id:"u05", b:1.0, type:"INFER",
+        story:`A friend texts: “Great, exactly what I needed 🙃.”`,
+        q:"What is the tone most likely?",
+        a:"Sarcastic / not truly positive.",
+        opts:["Very grateful.","Sarcastic / not truly positive.","Purely factual.","Confused and asking a question."]},
+      {id:"u06", b:1.1, type:"TEXT_Q",
+        story:`A reviewer writes: “The plot moves like fog—everywhere and going nowhere.
 The language, however, cuts like glass.”`,
-       q:"What did the reviewer like and dislike?",
-       a:"Liked the writing style; disliked the plot.",
-       opts:["Liked the plot; disliked the language.","Liked the writing style; disliked the plot.","Disliked both.","Liked both."]},
+        q:"What did the reviewer like and dislike?",
+        a:"Liked the writing style; disliked the plot.",
+        opts:["Liked the plot; disliked the language.","Liked the writing style; disliked the plot.","Disliked both.","Liked both."]},
+      {id:"u07", b:1.2, type:"CLOZE", q:"He spoke ___ , choosing each word carefully.", a:"deliberately", opts:["deliberately","deliciously","deeply","daily"]},
+      {id:"u08", b:1.3, type:"TEXT_Q",
+        story:`The vendor replies immediately with a replacement link.
+Later, the customer posts: “No response from the seller.”`,
+        q:"What does this suggest?",
+        a:"The review is likely unfair or the customer missed the reply.",
+        opts:[
+          "The review is likely unfair or the customer missed the reply.",
+          "The seller never replied.",
+          "The customer is definitely right.",
+          "The link was a scam (certainly)."
+        ]},
 
-      // --- D4 TEXT_Q (no math) ---
-      {d:4, type:"TEXT_Q",
-       story:`The teacher posts two essays on her desk.
-One has a faint coffee ring near the title. The other smells like fresh printer ink.
-Earlier she said: “The student who usually emails drafts forgot a laptop today and printed at the library just before class.”`,
-       q:"Which essay likely belongs to that student?",
-       a:"The one that smells like fresh printer ink.",
-       opts:[
-         "The one with the coffee ring.",
-         "The one that smells like fresh printer ink.",
-         "Both essays.",
-         "Neither essay."
-       ]},
-
-      // --- D5 INFER (no math) ---
-      {d:5, type:"INFER",
-       story:`An email thread shows a complaint about a late delivery.
-The vendor replies right away with a replacement link.
-That afternoon, the customer posts a review saying: “No response from the seller.”`,
-       q:"What does this suggest about the review’s fairness?",
-       a:"It’s likely unfair or the customer ignored the reply.",
-       opts:[
-         "The review is definitely accurate.",
-         "The vendor replied too late.",
-         "It’s likely unfair or the customer ignored the reply.",
-         "The seller deleted the messages."
-       ]},
-
-      {d:5, type:"INFER",
-       story:`The cat always hides when it hears the vacuum.
-Today the vacuum stayed in the closet, yet the cat is under the bed and the floor is newly clean.
+      // ===== HARD (b ~ +1.4..+2.1) =====
+      {id:"h01", b:1.4, type:"INFER",
+        story:`The cat hides when it hears the vacuum.
+Today the vacuum stayed in the closet, but the floor is clean.
 The robot mop is quiet unless it gets stuck; then it makes a loud whir that sounds like a vacuum.`,
-       q:"What likely startled the cat?",
-       a:"The robot mop got stuck and made a loud whir.",
-       opts:["The vacuum was used for hours.","Thunder outside.","The robot mop got stuck and made a loud whir.","A dog barked once."]},
-
-      {d:5, type:"INFER",
-       story:`A traveler asks a local for a café that “doesn’t try too hard.”
-The local points to a place with no sign, a sleepy dog at the door, and mismatched chairs.
-The traveler posts photos of latte art and neon slogans from the spot across the street.`,
-       q:"Did the traveler follow the local’s advice?",
-       a:"No — they chose the opposite kind of place.",
-       opts:[
-         "Yes — the photos prove it.",
-         "No — they chose the opposite kind of place.",
-         "Yes — because there was a dog.",
-         "Not enough information."
-       ]},
+        q:"What likely startled the cat?",
+        a:"The robot mop got stuck and made a loud whir.",
+        opts:["The vacuum was used all day.","Thunder outside.","The robot mop got stuck and made a loud whir.","A bird sang."]},
+      {id:"h02", b:1.6, type:"INFER",
+        story:`Two siblings both claim they cleaned the kitchen.
+The stove smells of lemon. The quiet sibling hates lemon cleaner.
+The trash is tied but still in the bin. The chatty sibling often forgets to take out trash.`,
+        q:"Who most likely cleaned, and why?",
+        a:"The chatty sibling; lemon smell + trash still in the bin.",
+        opts:[
+          "The quiet sibling; dry sponge.",
+          "The chatty sibling; lemon smell + trash still in the bin.",
+          "Both; it’s impossible to tell.",
+          "Neither; the kitchen is dirty."
+        ]},
+      {id:"h03", b:1.8, type:"TEXT_Q",
+        story:`A note says: “I returned the book you never lent me.”
+The librarian scans a novel and places it on the found shelf under your name.`,
+        q:"What likely happened?",
+        a:"Someone returned a book connected to you, and the note is ironic.",
+        opts:[
+          "Someone returned a book connected to you, and the note is ironic.",
+          "You definitely stole a book.",
+          "The librarian is joking about scanning machines.",
+          "Nothing happened; it’s random."
+        ]},
+      {id:"h04", b:2.0, type:"INFER",
+        story:`In a meeting, the manager says, “That’s… bold,” and shuts the laptop.
+Later that day, a competitor announces a similar feature, and the idea is suddenly approved.`,
+        q:"Why did the manager’s decision change?",
+        a:"Competitive pressure made the idea urgent.",
+        opts:[
+          "They forgot the idea until later.",
+          "Competitive pressure made the idea urgent.",
+          "They got a new laptop.",
+          "They disliked the competitor, so they cancelled it."
+        ]},
     ];
 
     // 10+ per bucket
@@ -541,32 +590,32 @@ The traveler posts photos of latte art and neon slogans from the spot across the
         ["Octonauts","Easy step up"],
       ],
       EASY: [
-        ["Ben & Holly’s Little Kingdom","A bit richer than Peppa"],
+        ["Ben & Holly’s Little Kingdom","Richer than Peppa, still clear"],
         ["Curious George","Context helps a lot"],
-        ["Arthur","School topics"],
+        ["Arthur","School + everyday topics"],
         ["Mickey Mouse Clubhouse","Clear commands"],
         ["Max & Ruby","Daily life"],
-        ["Bluey","Great for growth"],
-        ["Octonauts","Gentle vocabulary expansion"],
+        ["Bluey","Natural but very learnable"],
+        ["Octonauts","Gentle vocab expansion"],
         ["Dora the Explorer","Repetition"],
-        ["Peppa Pig","Finish the base to 80–90%"],
+        ["Peppa Pig","Solid base builder"],
         ["Sesame Street","Vocabulary in chunks"],
         ["Paw Patrol","Strong base"],
-        ["Postman Pat","Predictable language"],
+        ["Sarah & Duck","Calm pace + context"],
       ],
       MID: [
         ["Avatar: The Last Airbender","Story + clear speech"],
         ["Hilda","Good context, calmer pace"],
-        ["Steven Universe","A lot of context"],
+        ["Steven Universe","Context-heavy"],
         ["Gravity Falls","Humor + story (sometimes fast)"],
-        ["Adventure Time","Different voices, but repetitive patterns"],
+        ["Adventure Time","Varied voices"],
         ["We Bare Bears","Modern everyday language"],
-        ["Phineas and Ferb","Faster, but formula repeats"],
+        ["Phineas and Ferb","Fast but repetitive structure"],
         ["Teen Titans Go!","Fast but short lines"],
         ["The Dragon Prince","More dialogue, story-driven"],
         ["How to Train Your Dragon (series)","More vocabulary"],
         ["Kung Fu Panda (series)","Action but understandable"],
-        ["Regular Show","Bridge to adult speech"],
+        ["Regular Show","Bridge upward"],
       ],
       HARD: [
         ["The Simpsons","References + speed"],
@@ -585,9 +634,42 @@ The traveler posts photos of latte art and neon slogans from the spot across the
     };
 
     // ============================
-    // STATE
+    // DOM
     // ============================
     const $ = (id) => document.getElementById(id);
+
+    // ============================
+    // Posterior grid
+    // ============================
+    function makeGrid(){
+      const xs = [];
+      for(let t=-3.0; t<=3.0001; t+=0.05) xs.push(+t.toFixed(2));
+      const w = xs.map(x => Math.exp(-0.5*x*x)); // N(0,1) prior (unnormalized)
+      return {xs, w};
+    }
+    function logistic(z){ return 1 / (1 + Math.exp(-z)); }
+    function pCorrect(theta, b){ return logistic(A * (theta - b)); }
+
+    function normalize(arr){
+      const s = arr.reduce((a,b)=>a+b,0);
+      if (s <= 0) return arr.map(_=>1/arr.length);
+      return arr.map(v=>v/s);
+    }
+    function meanAndSD(xs, w){
+      const s = w.reduce((a,b)=>a+b,0);
+      const m = xs.reduce((acc,x,i)=>acc + x*w[i], 0) / s;
+      const v = xs.reduce((acc,x,i)=>acc + (x-m)*(x-m)*w[i], 0) / s;
+      return {mean:m, sd:Math.sqrt(Math.max(1e-9, v))};
+    }
+    function confLabel(sd){
+      if (sd <= 0.30) return "High";
+      if (sd <= 0.45) return "Medium";
+      return "Low";
+    }
+
+    // ============================
+    // Adaptive state
+    // ============================
     let state = null;
 
     function toast(msg){
@@ -596,13 +678,6 @@ The traveler posts photos of latte art and neon slogans from the spot across the
       t.style.display = "block";
       clearTimeout(toast._tm);
       toast._tm = setTimeout(()=> t.style.display="none", 1500);
-    }
-    function shuffle(arr){
-      for (let i = arr.length - 1; i > 0; i--){
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
     }
     function ytSearchUrl(title){
       return "https://www.youtube.com/results?search_query=" + encodeURIComponent(title + " english full episodes");
@@ -620,58 +695,125 @@ The traveler posts photos of latte art and neon slogans from the spot across the
       }
     }
 
-    // ============================
-    // TEST (adaptive)
-    // ============================
+    function levelFromTheta(theta){
+      // tuned for cartoon-selection, not CEFR exam
+      if (theta < -1.05) return {key:"START", name:"START", badge:"badge-ok", explain:"Very simple cartoons with strong repetition."};
+      if (theta < -0.25) return {key:"EASY",  name:"EASY",  badge:"badge-ok", explain:"Kids shows with clear speech and lots of context."};
+      if (theta < 0.65)  return {key:"MID",   name:"MID",   badge:"badge-mid", explain:"Story-driven cartoons; keep it 60–80% clear."};
+      return               {key:"HARD",  name:"HARD",  badge:"badge-hard", explain:"Faster dialogue, jokes, references."};
+    }
+
     function initTest(){
-      const bank = shuffle(BANK.map(q => ({...q, _asked:false})));
+      const {xs, w} = makeGrid();
+      // clone bank, mark unasked
+      const items = ITEM_BANK.map(it => ({...it, _asked:false}));
+
       state = {
-        total: Math.min(TOTAL_QUESTIONS, bank.length),
+        xs,
+        post: normalize(w.slice()),
+        items,
         asked: 0,
         correct: 0,
-        ability: 50,
-        focus: 3,
-        bank,
         locked: false,
         current: null,
-        history: []
+        history: [],
       };
+
       $("testRow").style.display = "";
       $("resultRow").style.display = "none";
-      renderProgress();
-      nextQuestion();
+      updateTopStats();
+      nextQuestion(true);
     }
 
-    function pickNext(){
-      const remaining = state.bank.filter(q => !q._asked);
+    function updatePosterior(isCorrect, item){
+      // Bayesian update on grid
+      const xs = state.xs;
+      const post = state.post;
+      for(let i=0;i<xs.length;i++){
+        const p = pCorrect(xs[i], item.b);
+        post[i] *= (isCorrect ? p : (1 - p));
+      }
+      state.post = normalize(post);
+    }
+
+    function selectNextItem(){
+      const remaining = state.items.filter(it => !it._asked);
       if (!remaining.length) return null;
-      remaining.sort((a,b)=> Math.abs(a.d - state.focus) - Math.abs(b.d - state.focus));
-      return remaining[0];
+
+      const ms = meanAndSD(state.xs, state.post);
+      const thetaHat = ms.mean;
+
+      // pick item with b closest to thetaHat (max info near p=0.5)
+      let best = null;
+      let bestScore = -Infinity;
+
+      for (const it of remaining){
+        const p = pCorrect(thetaHat, it.b);
+        const info = p * (1 - p);          // highest near 0.25
+        const closeness = -Math.abs(it.b - thetaHat); // closer is better
+        // weighted score: closeness dominates, info breaks ties
+        const score = closeness * 10 + info;
+        if (score > bestScore){
+          bestScore = score;
+          best = it;
+        }
+      }
+      return best;
     }
 
-    function renderQuestion(q){
-      state.current = q;
+    function shouldStop(){
+      const ms = meanAndSD(state.xs, state.post);
+      // Early stop rules:
+      // 1) at least MIN_Q
+      // 2) confident enough OR reached MAX_Q OR bank exhausted
+      if (state.asked < MIN_Q) return false;
+      if (ms.sd <= TARGET_SD) return true;
+      if (state.asked >= MAX_Q) return true;
+      return false;
+    }
+
+    function updateTopStats(){
+      const ms = meanAndSD(state.xs, state.post);
+      const acc = state.asked ? Math.round((state.correct/state.asked)*100) : 0;
+      $("progressText").textContent = state.asked + "/" + MAX_Q + " (stops early)";
+      $("accuracyText").textContent = "accuracy: " + (state.asked ? acc + "%" : "—");
+      $("confText").textContent = "confidence: " + confLabel(ms.sd);
+
+      const pct = Math.min(100, Math.round((state.asked / MAX_Q) * 100));
+      $("progressBar").style.width = pct + "%";
+
+      $("estBadge").textContent = "estimate: " + ms.mean.toFixed(2);
+      $("sdBadge").textContent = "± " + ms.sd.toFixed(2);
+    }
+
+    function renderQuestion(item){
+      state.current = item;
       state.locked = false;
 
-      $("diffBadge").textContent = "difficulty: " + "★".repeat(q.d) + "☆".repeat(5-q.d);
       $("typeBadge").textContent =
-        "type: " + (q.type === "CLOZE" ? "choose word" : (q.type === "INFER" ? "inference" : "read & answer"));
+        "type: " + (item.type === "CLOZE" ? "choose word" : (item.type === "INFER" ? "inference" : "read & answer"));
 
-      $("qTitle").textContent = q.q;
+      $("qTitle").textContent = item.q;
       $("qSub").textContent =
-        q.type === "CLOZE" ? "Choose the best word." :
-        q.type === "INFER" ? "Choose the best meaning." :
+        item.type === "CLOZE" ? "Choose the best word." :
+        item.type === "INFER" ? "Choose the best meaning." :
         "Read the text and answer the question.";
 
-      if (q.story){
+      if (item.story){
         $("storyBox").style.display = "";
-        $("storyBox").textContent = q.story;
+        $("storyBox").textContent = item.story;
       } else {
         $("storyBox").style.display = "none";
         $("storyBox").textContent = "";
       }
 
-      const opts = shuffle(q.opts.slice());
+      // shuffle options without mutating original
+      const opts = item.opts.slice();
+      for (let i = opts.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [opts[i], opts[j]] = [opts[j], opts[i]];
+      }
+
       const grid = $("answersGrid");
       grid.innerHTML = "";
       opts.forEach((opt, i)=>{
@@ -679,20 +821,11 @@ The traveler posts photos of latte art and neon slogans from the spot across the
         btn.type = "button";
         btn.className = "ans-btn";
         btn.textContent = (i+1) + ") " + opt;
-        btn.addEventListener("click", ()=> answer(opt === q.a, btn));
+        btn.addEventListener("click", ()=> answer(opt === item.a, btn));
         grid.appendChild(btn);
       });
-    }
 
-    function updateAbility(isCorrect, d, type){
-      let gain = 5 + d*2;
-      let loss = 6 + d*2;
-      if (type === "INFER"){ gain += 2; loss += 2; }
-      if (type === "TEXT_Q"){ gain += 1; loss += 1; }
-
-      state.ability = Math.max(0, Math.min(100, state.ability + (isCorrect ? gain : -loss)));
-      if (isCorrect && state.focus < 5) state.focus++;
-      if (!isCorrect && state.focus > 1) state.focus--;
+      updateTopStats();
     }
 
     function disableAnswers(){
@@ -703,13 +836,13 @@ The traveler posts photos of latte art and neon slogans from the spot across the
       if (state.locked) return;
       state.locked = true;
 
-      const q = state.current;
+      const item = state.current;
       disableAnswers();
 
-      // mark correct
+      // mark correct option
       $("answersGrid").querySelectorAll("button").forEach(btn=>{
         const txt = btn.textContent.replace(/^\d+\)\s*/, "").trim();
-        if (txt === q.a) btn.classList.add("ans-correct");
+        if (txt === item.a) btn.classList.add("ans-correct");
       });
 
       if (isCorrect){
@@ -721,71 +854,61 @@ The traveler posts photos of latte art and neon slogans from the spot across the
         toast("Wrong ❌");
       }
 
-      q._asked = true;
+      item._asked = true;
       state.asked++;
-      state.history.push({d:q.d, type:q.type, ok:isCorrect});
-      updateAbility(isCorrect, q.d, q.type);
-      renderProgress();
+      state.history.push({id:item.id, b:item.b, type:item.type, ok:isCorrect});
 
-      setTimeout(()=> nextQuestion(), 650);
+      updatePosterior(isCorrect, item);
+      updateTopStats();
+
+      setTimeout(()=> nextQuestion(false), 550);
     }
 
     function skip(){
       if (!state || state.locked) return;
-      const q = state.current;
-
+      // treat as incorrect (safer for recommendations)
+      const item = state.current;
       disableAnswers();
       $("answersGrid").querySelectorAll("button").forEach(btn=>{
         const txt = btn.textContent.replace(/^\d+\)\s*/, "").trim();
-        if (txt === q.a) btn.classList.add("ans-correct");
+        if (txt === item.a) btn.classList.add("ans-correct");
       });
 
-      q._asked = true;
+      item._asked = true;
       state.asked++;
-      state.history.push({d:q.d, type:q.type, ok:false, skip:true});
-      updateAbility(false, q.d, q.type);
-      renderProgress();
+      state.history.push({id:item.id, b:item.b, type:item.type, ok:false, skip:true});
+
+      updatePosterior(false, item);
+      updateTopStats();
 
       toast("Skipped");
-      setTimeout(()=> nextQuestion(), 650);
+      setTimeout(()=> nextQuestion(false), 550);
     }
 
-    function nextQuestion(){
+    function nextQuestion(isFirst){
       if (!state) return;
-      if (state.asked >= state.total){ finish(); return; }
-      const q = pickNext();
-      if (!q){ finish(); return; }
-      renderQuestion(q);
-    }
 
-    function renderProgress(){
-      if (!state){
-        $("progressText").textContent = "0/0";
-        $("accuracyText").textContent = "accuracy: —";
-        $("progressBar").style.width = "0%";
+      if (!isFirst && shouldStop()){
+        finish("Stopped early (enough signal).");
         return;
       }
-      $("progressText").textContent = state.asked + "/" + state.total;
-      const acc = state.asked ? Math.round((state.correct/state.asked)*100) : 0;
-      $("accuracyText").textContent = "accuracy: " + (state.asked ? acc + "%" : "—");
-      $("progressBar").style.width = Math.round((state.asked/state.total)*100) + "%";
+
+      const next = selectNextItem();
+      if (!next){
+        finish("No more questions.");
+        return;
+      }
+      renderQuestion(next);
     }
 
     // ============================
-    // RESULT
+    // RESULT + SAVE
     // ============================
-    function mapLevel(ability){
-      if (ability < 30) return {key:"START", name:"START", badge:"badge-ok", est:"Very basic comprehension", explain:"Use very simple cartoons with repetition."};
-      if (ability < 48) return {key:"EASY",  name:"EASY",  badge:"badge-ok", est:"Basic-to-low intermediate", explain:"Simple cartoons + clear speech."};
-      if (ability < 68) return {key:"MID",   name:"MID",   badge:"badge-mid", est:"Comfortable with many kids shows", explain:"Story-driven cartoons. Stay at 60–80% clear."};
-      return {key:"HARD", name:"HARD", badge:"badge-hard", est:"Ready for faster dialogue", explain:"More jokes, references, faster speech."};
-    }
-
     function renderRecommendations(levelKey){
-      const list = CARTOONS[levelKey] || [];
+      const list = (CARTOONS[levelKey] || []).slice(0, 12);
       const grid = $("recGrid");
       grid.innerHTML = "";
-      list.slice(0, 12).forEach(([title, note])=>{
+      list.forEach(([title, note])=>{
         const col = document.createElement("div");
         col.className = "col-12 col-md-6 col-xl-4";
         col.innerHTML = `
@@ -801,25 +924,28 @@ The traveler posts photos of latte art and neon slogans from the spot across the
       });
     }
 
-    function finish(){
+    function finish(note){
+      const ms = meanAndSD(state.xs, state.post);
+      const level = levelFromTheta(ms.mean);
       const acc = state.asked ? Math.round((state.correct/state.asked)*100) : 0;
-      const level = mapLevel(state.ability);
+
       const obj = {
         savedAt: new Date().toISOString(),
-        ability: state.ability,
+        note,
+        thetaMean: ms.mean,
+        thetaSD: ms.sd,
+        confidence: confLabel(ms.sd),
         level,
         asked: state.asked,
         correct: state.correct,
         accuracy: acc,
         history: state.history
       };
+
       save(obj);
       showResult(obj);
     }
 
-    // ============================
-    // SAVE/LOAD
-    // ============================
     function save(obj){
       localStorage.setItem(KEY, JSON.stringify(obj));
       $("savedHint").style.display = "block";
@@ -839,20 +965,24 @@ The traveler posts photos of latte art and neon slogans from the spot across the
       $("resultRow").style.display = "";
       $("btnStart").textContent = "Start";
 
-      $("resultMeta").textContent = "Saved: " + fmtDate(obj.savedAt);
+      $("resultMeta").textContent = `${obj.note} • Saved: ${fmtDate(obj.savedAt)} • estimate=${obj.thetaMean.toFixed(2)} ± ${obj.thetaSD.toFixed(2)}`;
 
       $("levelName").textContent = obj.level.name;
       $("levelName").className = "h3 fw-bold mb-1 " + obj.level.badge;
       $("levelExplain").textContent = obj.level.explain;
-      $("estimate").textContent = obj.level.est;
+
+      $("finalConf").textContent = obj.confidence;
+      $("finalSD").textContent = "uncertainty: ± " + obj.thetaSD.toFixed(2) + " (lower = better)";
 
       $("finalAccuracy").textContent = obj.accuracy + "%";
-      $("finalCount").textContent = obj.correct + " / " + obj.asked;
+      $("finalCount").textContent = obj.correct + " / " + obj.asked + " answered";
 
       renderRecommendations(obj.level.key);
 
-      $("progressText").textContent = obj.asked + "/" + obj.asked;
+      // top bar
+      $("progressText").textContent = obj.asked + " questions (adaptive)";
       $("accuracyText").textContent = "accuracy: " + obj.accuracy + "%";
+      $("confText").textContent = "confidence: " + obj.confidence;
       $("progressBar").style.width = "100%";
     }
 
@@ -865,12 +995,11 @@ The traveler posts photos of latte art and neon slogans from the spot across the
         $("savedHint").style.display = "block";
         $("savedHint").textContent = "Last saved: " + fmtDate(saved.savedAt);
         showResult(saved);
-      } else {
-        renderProgress();
       }
 
       $("btnStart").addEventListener("click", ()=>{
         closeNavIfOpen();
+        $("resultRow").style.display = "none";
         initTest();
         toast("Go!");
       });
@@ -879,10 +1008,12 @@ The traveler posts photos of latte art and neon slogans from the spot across the
 
       $("btnRestart").addEventListener("click", ()=>{
         closeNavIfOpen();
+        $("resultRow").style.display = "none";
         initTest();
       });
 
       $("btnRetake").addEventListener("click", ()=>{
+        $("resultRow").style.display = "none";
         initTest();
         window.scrollTo({top:0, behavior:"smooth"});
       });
@@ -893,9 +1024,7 @@ The traveler posts photos of latte art and neon slogans from the spot across the
           saved.savedAt = new Date().toISOString();
           save(saved);
           toast("Saved");
-        } else {
-          toast("Nothing to save yet");
-        }
+        } else toast("Nothing to save yet");
       });
 
       $("btnShowSaved").addEventListener("click", ()=>{
@@ -912,7 +1041,10 @@ The traveler posts photos of latte art and neon slogans from the spot across the
           clearCache();
           $("resultRow").style.display = "none";
           $("testRow").style.display = "none";
-          renderProgress();
+          $("progressBar").style.width = "0%";
+          $("progressText").textContent = "0/0";
+          $("accuracyText").textContent = "accuracy: —";
+          $("confText").textContent = "confidence: —";
         }
       });
     })();
